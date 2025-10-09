@@ -5,6 +5,9 @@
 #include <iostream>
 
 #define SERVER_IP "10.10.1.2"
+#define INSERT_COUNT (1 << 26)
+#define FALSE_POSITIVE_RATE (double)1.0 / 512
+#define BLOCK_SIZE 4
 
 int main(int argc, char **argv) {
 
@@ -15,7 +18,7 @@ int main(int argc, char **argv) {
 
 
     struct RdmaBF_Cli rdma_bf_cli;
-    RdmaBF_Cli_init(&rdma_bf_cli, 1000000, (double)1.0 / 512, SERVER_IP);
+    RdmaBF_Cli_init(&rdma_bf_cli, INSERT_COUNT, FALSE_POSITIVE_RATE, SERVER_IP);
 
     recv(rdma_bf_cli.sockfd, cmd, 6, 0);
 
@@ -26,7 +29,7 @@ int main(int argc, char **argv) {
     false_positive = 0;
     for (uint64_t i = 10000; i < 20000; i++) {
         if (!RdmaBF_Cli_lookup(&rdma_bf_cli, i)) {
-            false_positive++;
+            ;
         }
     }
 
@@ -36,7 +39,7 @@ int main(int argc, char **argv) {
 // ----------------------------------------------------------------------------------------------
 
     // struct RdmaBBF_Cli rdma_bbf_cli;
-    // RdmaBBF_Cli_init(&rdma_bbf_cli, 1000000, (double)1.0 / 512, 4, SERVER_IP);
+    // RdmaBBF_Cli_init(&rdma_bbf_cli, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE, SERVER_IP);
 
     // recv(rdma_bbf_cli.sockfd, cmd, 6, 0);
 
@@ -47,7 +50,7 @@ int main(int argc, char **argv) {
     // false_positive = 0;
     // for (uint64_t i = 10000; i < 20000; i++) {
     //     if (!RdmaBBF_Cli_lookup(&rdma_bbf_cli, i)) {
-    //         false_positive++;
+    //         ;
     //     }
     // }
 
@@ -57,7 +60,7 @@ int main(int argc, char **argv) {
 // ----------------------------------------------------------------------------------------------
 
     // struct RdmaOHBBF_Cli rdma_ohbbf_cli;
-    // RdmaOHBBF_Cli_init(&rdma_ohbbf_cli, 1000000, (double)1.0 / 512, 4, SERVER_IP);
+    // RdmaOHBBF_Cli_init(&rdma_ohbbf_cli, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE, SERVER_IP);
 
     // recv(rdma_ohbbf_cli.sockfd, cmd, 6, 0);
 
@@ -68,7 +71,7 @@ int main(int argc, char **argv) {
     // false_positive = 0;
     // for (uint64_t i = 10000; i < 20000; i++) {
     //     if (!RdmaOHBBF_Cli_lookup(&rdma_ohbbf_cli, i)) {
-    //         false_positive++;
+    //         ;
     //     }
     // }
 

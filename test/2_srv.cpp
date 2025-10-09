@@ -4,13 +4,16 @@
 
 #include <iostream>
 
+#define INSERT_COUNT (1 << 26)
+#define FALSE_POSITIVE_RATE (double)1.0 / 512
+
 int main(int argc, char **argv) {
     char cmd[16];
 
 
 
     struct RdmaBF_Srv rdma_bf_srv;
-    RdmaBF_Srv_init(&rdma_bf_srv, 1000000, (double)1.0 / 512);
+    RdmaBF_Srv_init(&rdma_bf_srv, INSERT_COUNT, FALSE_POSITIVE_RATE);
 
     send(rdma_bf_srv.sockfd, "READY", 6, 0);
 
@@ -21,7 +24,7 @@ int main(int argc, char **argv) {
 // ----------------------------------------------------------------------------------------------
 
     // struct RdmaBBF_Srv rdma_bbf_srv;
-    // RdmaBBF_Srv_init(&rdma_bbf_srv, 1000000, (double)1.0 / 512);
+    // RdmaBBF_Srv_init(&rdma_bbf_srv, INSERT_COUNT, FALSE_POSITIVE_RATE);
 
     // send(rdma_bbf_srv.sockfd, "READY", 6, 0);
 
@@ -32,7 +35,7 @@ int main(int argc, char **argv) {
 // ----------------------------------------------------------------------------------------------
 
     // struct RdmaOHBBF_Srv rdma_ohbbf_srv;
-    // RdmaOHBBF_Srv_init(&rdma_ohbbf_srv, 1000000, (double)1.0 / 512);
+    // RdmaOHBBF_Srv_init(&rdma_ohbbf_srv, INSERT_COUNT, FALSE_POSITIVE_RATE);
 
     // send(rdma_ohbbf_srv.sockfd, "READY", 6, 0);
 
