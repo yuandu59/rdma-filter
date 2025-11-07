@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <chrono>
+
 
 #define SERVER_IP "10.10.1.2"
 #define INSERT_COUNT (1 << 26)
@@ -16,7 +18,6 @@
 
 int main(int argc, char **argv) {
 
-    char cmd[16];
     int false_positive_count = 0, true_positive_count = 0, true_negative_count = 0;
     std::vector<uint64_t> to_insert = GenerateRandom64(REAL_INSERT_COUNT), to_lookup = {};
     std::unordered_set<uint64_t> to_insert_set(to_insert.begin(), to_insert.end());

@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
     struct RdmaBF_Srv rdma_bf_srv;
     RdmaBF_Srv_init(&rdma_bf_srv, INSERT_COUNT, FALSE_POSITIVE_RATE, CLIENT_COUNT);
 
-    for (auto i : rdma_bf_srv.sockfd_list) {
-        recv(i, cmd, 5, 0);
+    for (int i = 0; i < CLIENT_COUNT; i++) {
+        recv(rdma_bf_srv.sockfd_list[i], cmd, 5, 0);
     }
 
     RdmaBF_Srv_destroy(&rdma_bf_srv);

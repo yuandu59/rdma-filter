@@ -114,6 +114,7 @@ void RdmaBF_Cli_init(struct RdmaBF_Cli *rdma_bf, unsigned int n, double fpr, con
         fprintf(stderr, "ibv_reg_mr for mutex");
     }
 
+    char cmd[6];
     recv(rdma_bf->sockfd, cmd, 6, 0);
 
     std::cout << "[Client] RDMA connection established successfully!" << std::endl;
@@ -194,14 +195,14 @@ int RdmaBF_Cli_insert(struct RdmaBF_Cli *rdma_bf, uint64_t key) {
     wr.wr.rdma.remote_addr = rdma_bf->remote_info.remote_addr + byte_offset;
     wr.wr.rdma.rkey = rdma_bf->remote_info.rkey;
 
-    ibv_send_wr *bad_wr;
+    // ibv_send_wr *bad_wr;
     if (ibv_post_send(rdma_bf->qp, &wr, &bad_wr)) {
         fprintf(stderr, "ibv_post_send (RDMA READ)");
         return 1;
     }
 
     // 等待完成事件（poll cq）
-    ibv_wc wc;
+    // ibv_wc wc;
     while (ibv_poll_cq(rdma_bf->cq, 1, &wc) < 1);
     if (wc.status != IBV_WC_SUCCESS) {
         fprintf(stderr, "RDMA READ failed: %s\n", ibv_wc_status_str(wc.status));
@@ -397,8 +398,8 @@ void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int
         recv(client_fd, &rdma_bf->remote_info_list[i], sizeof(rdma_bf->remote_info_list[i]), 0);
     }
 
-    for (auto i : rdma_bf->sockfd_list) {
-        send(i, "READY", 6, 0);
+    for (int i = 0; i < client_count; i++) {
+        send(rdma_bf->sockfd_list[i], "READY", 6, 0);
     }
 
     std::cout << "[Server] RDMA connection established successfully!" << std::endl;

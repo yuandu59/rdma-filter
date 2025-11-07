@@ -1,10 +1,9 @@
 
-ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode305.clemson.cloudlab.us
+ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@c220g1-030830.wisc.cloudlab.us
 ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode294.clemson.cloudlab.us
 
-
 cd D:\study\rdma-filter\
-scp -r src test CMakeLists.txt yunchuan@clnode305.clemson.cloudlab.us:exp01
+scp -r src test CMakeLists.txt yunchuan@c220g1-030830.wisc.cloudlab.us:exp01
 scp -r src test CMakeLists.txt yunchuan@clnode294.clemson.cloudlab.us:exp01
 
 scp src\rdma_bf\rdma_bf.h yunchuan@clnode305.clemson.cloudlab.us:exp01\src\rdma_bf

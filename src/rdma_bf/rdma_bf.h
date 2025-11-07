@@ -62,21 +62,13 @@ struct RdmaBF_Srv
     uint8_t *mutex_list;
 };
 
-void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr);
+void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int client_count);
 
 void RdmaBF_Srv_destroy(struct RdmaBF_Srv *rdma_bf);
 
 void RdmaBF_Srv_clear(struct RdmaBF_Srv *rdma_bf);
 
 
-ibv_send_wr DEFAULT_RDMA_READ_WR = {
-    .wr_id = 1,
-    .opcode = IBV_WR_RDMA_READ,
-    // .sg_list = &sge,
-    .num_sge = 1,
-    .send_flags = IBV_SEND_SIGNALED,
-    // .wr.rdma.remote_addr = remote_addr,
-    // .wr.rdma.rkey = rkey,
-};
+// ibv_send_wr DEFAULT_RDMA_READ_WR;
 
 #endif /* __RDMA_BF_H__ */
