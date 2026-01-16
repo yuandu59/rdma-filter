@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <string>
 
+#define COUNT_RETRY_CAS_MAX 1000
+
 ibv_qp *create_rc_qp(ibv_pd *pd, ibv_cq *cq) {
     ibv_qp_init_attr qp_init_attr = {};
     qp_init_attr.send_cq = cq;
@@ -65,7 +67,7 @@ int modify_rts_qp(ibv_qp* qp, uint32_t sq_psn) {
 }
 
 ibv_sge *create_sge(ibv_mr* mr) {
-    ibv_sge *sge = new ibv_sge();
+    ibv_sge *sge = (ibv_sge *)malloc(sizeof(ibv_sge));
     sge->addr = (uintptr_t)mr->addr;
     sge->length = mr->length;
     sge->lkey = mr->lkey;
@@ -73,7 +75,7 @@ ibv_sge *create_sge(ibv_mr* mr) {
 }
 
 rdma_conn_info *create_local_info(ibv_context *ctx, uint8_t port, uint8_t gid_index) {
-    rdma_conn_info *local_info = new rdma_conn_info();
+    rdma_conn_info *local_info = (rdma_conn_info *)malloc(sizeof(rdma_conn_info));
     local_info->psn = lrand48() & 0xffffff;
 
     ibv_gid tmp_gid;
@@ -129,7 +131,8 @@ int rdma_atomic_cas(ibv_qp *qp, int wr_id, ibv_sge *sge, ibv_cq *cq, uint64_t re
     ibv_send_wr *bad_wr;
     ibv_wc wc;
     // 自旋直到获取锁
-    while (1) {
+    int retry = 0;
+    while (retry++ < COUNT_RETRY_CAS_MAX) {
         if (ibv_post_send(qp, &wr, &bad_wr)) {
             assert_else(false, "ibv_post_send (CAS lock) failed");
             return 0;
@@ -141,9 +144,9 @@ int rdma_atomic_cas(ibv_qp *qp, int wr_id, ibv_sge *sge, ibv_cq *cq, uint64_t re
         }
         // 如果返回值为 compare_add，说明成功获取锁
         if (*((uint64_t *)(sge->addr)) == compare_add) break;
-        else usleep(100 + rand() % 200);
+        else usleep(200 + rand() % 300);
     }
-    return 1;
+    return retry < COUNT_RETRY_CAS_MAX ? 1 : 0;
 }
 
 ibv_context *open_rdma_ctx(const char* name_dev) {

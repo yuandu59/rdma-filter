@@ -35,6 +35,7 @@ if (TOGGLE_RDMA)
         rdmabbf
         rdmaohbbf
         ibverbs
+        rdmacf
     )
     target_compile_options(2_cli PRIVATE -Ofast)
 
@@ -48,6 +49,7 @@ if (TOGGLE_RDMA)
         rdmabbf
         rdmaohbbf
         ibverbs
+        rdmacf
     )
     target_compile_options(2_srv PRIVATE -Ofast)
 
@@ -63,5 +65,12 @@ if (TOGGLE_RDMA)
         ibverbs
     )
     target_compile_options(3_cli_test PRIVATE -Ofast)
+
+    if(TOGGLE_LOCK_FREE)
+        target_compile_definitions(0_test       PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(2_cli        PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(2_srv        PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(3_cli_test   PUBLIC TOGGLE_LOCK_FREE)
+    endif()
 
 endif()

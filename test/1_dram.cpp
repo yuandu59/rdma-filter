@@ -37,156 +37,159 @@ int main(int argc, char **argv) {
 
 // ----------------------------------------------------------------------------------------------
 
-    std::cout << "=== DramBF Experiment ===" << std::endl;
-    struct DramBF dram_bf;
-    DramBF_init(&dram_bf, INSERT_COUNT, FALSE_POSITIVE_RATE);
+    // std::cout << "=== DramBF Experiment ===" << std::endl;
+    // struct DramBF dram_bf;
+    // DramBF_init(&dram_bf, INSERT_COUNT, FALSE_POSITIVE_RATE);
 
-    for (int i = 0; i < 20; i++) {
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            DramBF_insert(&dram_bf, to_insert[i * SINGLE_ROUND_COUNT + j]);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+    // for (int i = 0; i < 20; i++) {
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         DramBF_insert(&dram_bf, to_insert[i * SINGLE_ROUND_COUNT + j]);
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
 
-        std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+    //     std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
 
-        true_positive_count = 0;
-        true_negative_count = 0;
-        false_positive_count = 0;
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            if (DramBF_lookup(&dram_bf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Positive Count: " << true_positive_count << std::endl;
-        std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
+    //     true_positive_count = 0;
+    //     true_negative_count = 0;
+    //     false_positive_count = 0;
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         if (DramBF_lookup(&dram_bf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Positive Count: " << true_positive_count << std::endl;
+    //     std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < LOOKUP_COUNT; j++) {
-            if (!DramBF_lookup(&dram_bf, to_lookup[j])) true_negative_count++;
-            else false_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Negative Count: " << true_negative_count << std::endl;
-        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-        std::cout << "False Positive Count: " << false_positive_count << std::endl;
-        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-    }
-    DramBF_destroy(&dram_bf);
-
-// ----------------------------------------------------------------------------------------------
-
-    std::cout << "=== DramBBF Experiment ===" << std::endl;
-    struct DramBBF dram_bbf;
-    DramBBF_init(&dram_bbf, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE);
-
-    for (int i = 0; i < 20; i++) {
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            DramBBF_insert(&dram_bbf, to_insert[i * SINGLE_ROUND_COUNT + j]);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
-
-        std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
-
-        true_positive_count = 0;
-        true_negative_count = 0;
-        false_positive_count = 0;
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            if (DramBBF_lookup(&dram_bbf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Positive Count: " << true_positive_count << std::endl;
-        std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
-
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < LOOKUP_COUNT; j++) {
-            if (!DramBBF_lookup(&dram_bbf, to_lookup[j])) true_negative_count++;
-            else false_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Negative Count: " << true_negative_count << std::endl;
-        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-        std::cout << "False Positive Count: " << false_positive_count << std::endl;
-        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-    }
-    DramBBF_destroy(&dram_bbf);
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < LOOKUP_COUNT; j++) {
+    //         if (!DramBF_lookup(&dram_bf, to_lookup[j])) true_negative_count++;
+    //         else false_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Negative Count: " << true_negative_count << std::endl;
+    //     std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+    //     std::cout << "False Positive Count: " << false_positive_count << std::endl;
+    //     std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
+    // }
+    // DramBF_destroy(&dram_bf);
+    // std::cout << "=== DramBF Experiment End ===" << std::endl;
 
 // ----------------------------------------------------------------------------------------------
 
-    std::cout << "=== DramOHBBF Experiment ===" << std::endl;
-    struct DramOHBBF dram_ohbbf;
-    DramOHBBF_init(&dram_ohbbf, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE);
+    // std::cout << "=== DramBBF Experiment ===" << std::endl;
+    // struct DramBBF dram_bbf;
+    // DramBBF_init(&dram_bbf, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE);
 
-    for (int i = 0; i < 20; i++) {
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            DramOHBBF_insert(&dram_ohbbf, to_insert[i * SINGLE_ROUND_COUNT + j]);
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+    // for (int i = 0; i < 20; i++) {
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         DramBBF_insert(&dram_bbf, to_insert[i * SINGLE_ROUND_COUNT + j]);
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
 
-        std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+    //     std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
 
-        true_positive_count = 0;
-        true_negative_count = 0;
-        false_positive_count = 0;
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
-            if (DramOHBBF_lookup(&dram_ohbbf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Positive Count: " << true_positive_count << std::endl;
-        std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
+    //     true_positive_count = 0;
+    //     true_negative_count = 0;
+    //     false_positive_count = 0;
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         if (DramBBF_lookup(&dram_bbf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Positive Count: " << true_positive_count << std::endl;
+    //     std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-        start_time = std::chrono::high_resolution_clock::now();
-        for (int j = 0; j < LOOKUP_COUNT; j++) {
-            if (!DramOHBBF_lookup(&dram_ohbbf, to_lookup[j])) true_negative_count++;
-            else false_positive_count++;
-        }
-        end_time = std::chrono::high_resolution_clock::now();
-        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
-        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-        std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-        std::cout << "True Negative Count: " << true_negative_count << std::endl;
-        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-        std::cout << "False Positive Count: " << false_positive_count << std::endl;
-        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-    }
-    DramOHBBF_destroy(&dram_ohbbf);
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < LOOKUP_COUNT; j++) {
+    //         if (!DramBBF_lookup(&dram_bbf, to_lookup[j])) true_negative_count++;
+    //         else false_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Negative Count: " << true_negative_count << std::endl;
+    //     std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+    //     std::cout << "False Positive Count: " << false_positive_count << std::endl;
+    //     std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
+    // }
+    // DramBBF_destroy(&dram_bbf);
+    // std::cout << "=== DramBBF Experiment End ===" << std::endl;
+
+// ----------------------------------------------------------------------------------------------
+
+    // std::cout << "=== DramOHBBF Experiment ===" << std::endl;
+    // struct DramOHBBF dram_ohbbf;
+    // DramOHBBF_init(&dram_ohbbf, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE);
+
+    // for (int i = 0; i < 20; i++) {
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         DramOHBBF_insert(&dram_ohbbf, to_insert[i * SINGLE_ROUND_COUNT + j]);
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Inserted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+
+    //     std::cout << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+
+    //     true_positive_count = 0;
+    //     true_negative_count = 0;
+    //     false_positive_count = 0;
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+    //         if (DramOHBBF_lookup(&dram_ohbbf, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << SINGLE_ROUND_COUNT << " existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Positive Count: " << true_positive_count << std::endl;
+    //     std::cout << "True Positive Rate: " << 1.0 * true_positive_count / SINGLE_ROUND_COUNT << std::endl;
+
+    //     start_time = std::chrono::high_resolution_clock::now();
+    //     for (int j = 0; j < LOOKUP_COUNT; j++) {
+    //         if (!DramOHBBF_lookup(&dram_ohbbf, to_lookup[j])) true_negative_count++;
+    //         else false_positive_count++;
+    //     }
+    //     end_time = std::chrono::high_resolution_clock::now();
+    //     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    //     std::cout << "= Lookuped " << LOOKUP_COUNT << " non-existing items =" << std::endl;
+    //     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+    //     std::cout << "Throughput(op/s): " << LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+    //     std::cout << "True Negative Count: " << true_negative_count << std::endl;
+    //     std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+    //     std::cout << "False Positive Count: " << false_positive_count << std::endl;
+    //     std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
+    // }
+    // DramOHBBF_destroy(&dram_ohbbf);
+    // std::cout << "=== DramOHBBF Experiment End ===" << std::endl;
 
 // ----------------------------------------------------------------------------------------------
 
@@ -239,6 +242,10 @@ int main(int argc, char **argv) {
         std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
     }
 
+    // debug
+    std::cout << "DramCF num_items_: " << dram_cf.getNum_items_() << std::endl;
+    std::cout << "DramCF NumTagsInTable: " << dram_cf.NumTagsInTable() << std::endl;
+
     std::cout << "=== DramCF Deletion Experiment ===" << std::endl;
     for (size_t i = 0; i < 20; i++) {
         start_time = std::chrono::high_resolution_clock::now();
@@ -251,7 +258,17 @@ int main(int argc, char **argv) {
         std::cout << "= Deleted " << SINGLE_ROUND_COUNT << " items =" << std::endl;
         std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
         std::cout << "Throughput(op/s): " << SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+
+        // debug
+        std::cout << "DramCF num_items_: " << dram_cf.getNum_items_() << std::endl;
+        std::cout << "DramCF NumTagsInTable: " << dram_cf.NumTagsInTable() << std::endl;
     }
+
+    // debug
+    std::cout << "DramCF num_items_: " << dram_cf.getNum_items_() << std::endl;
+    std::cout << "DramCF NumTagsInTable: " << dram_cf.NumTagsInTable() << std::endl;
+
+    std::cout << "=== DramCF Experiment End ===" << std::endl;
 
     return 0;
 }

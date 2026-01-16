@@ -9,6 +9,7 @@ target_include_directories(header INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/rdma_bbf
     ${CMAKE_CURRENT_SOURCE_DIR}/rdma_ohbbf
     ${CMAKE_CURRENT_SOURCE_DIR}/dram_cf
+    ${CMAKE_CURRENT_SOURCE_DIR}/rdma_cf
 )
 
 
@@ -53,5 +54,17 @@ if (TOGGLE_RDMA)
     add_library(rdmaohbbf STATIC "rdma_ohbbf/rdma_ohbbf.cpp")
     target_link_libraries(rdmaohbbf PUBLIC header murmur rdma_common)
     target_compile_options(rdmaohbbf PRIVATE -Ofast)
+
+    add_library(rdmacf STATIC "rdma_cf/rdma_cf.cpp")
+    target_link_libraries(rdmacf PUBLIC header murmur utils rdma_common ibverbs)
+    target_compile_options(rdmacf PRIVATE -Ofast)
+
+    if(TOGGLE_LOCK_FREE)
+        target_compile_definitions(rdma_common  PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(rdmabf      PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(rdmabbf      PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(rdmaohbbf    PUBLIC TOGGLE_LOCK_FREE)
+        target_compile_definitions(rdmacf       PUBLIC TOGGLE_LOCK_FREE)
+    endif()
 
 endif()

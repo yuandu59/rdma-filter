@@ -1,37 +1,44 @@
 cd D:\study\rdma-filter\
 
 实验室机器
-ssh -i "C:\Users\Yuandu\.ssh\id_rsa" -p 10131 root@210.28.134.155
 scp -r -i "C:\Users\Yuandu\.ssh\id_rsa" -P 10131 src test CMakeLists.txt build root@210.28.134.155:liuyunchuan/exp01
-cmake -DTOGGLE_RDMA=OFF ..
+ssh -i "C:\Users\Yuandu\.ssh\id_rsa" -p 10131 root@210.28.134.155
 cd liuyunchuan/exp01/build
+cmake -DTOGGLE_RDMA=OFF ..
+./test/1_test
 
 美国机器
-ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@ms1044.utah.cloudlab.us
-ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@ms1021.utah.cloudlab.us
-ssh -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@ms1038.utah.cloudlab.us
 
-scp -r src test build CMakeLists.txt yunchuan@ms1044.utah.cloudlab.us:exp01
-scp -r src test build CMakeLists.txt yunchuan@ms1021.utah.cloudlab.us:exp01
-scp -r src test build CMakeLists.txt yunchuan@ms1038.utah.cloudlab.us:exp01
+python scripts/test.py init
+python scripts/test.py compile
+python scripts/test.py deploy; python scripts/test.py run
+python scripts/test.py collect
+python scripts/test.py stop
+python scripts/test.py compile -DTOGGLE_LOCK_FREE=ON
+python scripts/test.py perftest
+
+ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode352.clemson.cloudlab.us
+ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode363.clemson.cloudlab.us
+ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode392.clemson.cloudlab.us
+
+scp -r src test build CMakeLists.txt yunchuan@ms0902.utah.cloudlab.us:exp01
+scp -r src test build CMakeLists.txt yunchuan@ms0913.utah.cloudlab.us:exp01
+scp -r src test build CMakeLists.txt yunchuan@ms0938.utah.cloudlab.us:exp01
 
 mkdir exp01
 sudo apt update
 sudo apt install cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux
 
-ssh yunchuan@ms1044.utah.cloudlab.us
-ssh yunchuan@ms1021.utah.cloudlab.us
-ssh yunchuan@ms1038.utah.cloudlab.us
-
-
-./test/1_test
-./test/2_srv
-./test/2_cli
-
-ping 10.10.1.1
 ib_send_bw -d mlx4_0 -i 2
 ib_send_bw -d mlx4_0 -i 2               10.10.1.1
 ib_send_bw -d mlx4_0 -i 2 -D 4 -s 65536 10.10.1.1
+
+tmux new -s exp_srv
+tmux new -s exp_cli
+./exp1/build/test/2_srv > out.log 2>&1; echo done > done.flag
+./exp1/build/test/2_cli > out.log 2>&1; echo done > done.flag
+tmux new-session -d -s exp_srv './exp1/build/test/2_srv > out.log 2>&1 && echo done > done.flag'
+tmux new-session -d -s exp_cli './exp1/build/test/2_cli > out.log 2>&1 && echo done > done.flag'
 
 
 tmux new -s t1
@@ -39,6 +46,8 @@ tmux new -s t1
 tmux ls
 tmux attach -t t1
 tmux kill-session -t t1
+
+ping 10.10.1.1
 
 
 查看NAT地址
@@ -48,7 +57,6 @@ ip addr
 ibstat
 或
 ib_devinfo
-
 
 
 ## CloudLab Node
@@ -69,17 +77,6 @@ c240g5, sm110p, sm220u, d7525, d8545
 
 + Clemson: 6
 ibm8335, r7525, r650, r6525, nvidiagh, r6615
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -116,5 +113,9 @@ ibm8335, r7525, r650, r6525, nvidiagh, r6615
 
 问题：误用cloudlab集群控制网络，流量过大被监测到，导致实验中断并收到官方邮件。
 解决：网卡两个端口，第一个端口默认是控制网络的，所以要使用第二个端口。两个端口的GID表是独立的，要查一下确认GID的index，该index是较稳定的，一般不变。
+如何判断该用哪个端口：对于ip地址，要用内网地址（10或者192.168）而不是公网地址。对于网卡端口，down状态的没开就不管，开着的里面，一种是控制用的，一种是实验用的。判断方法一：看性能，比如max MTU更大的是可能实验用的，rate更大的可能是实验用的；方法二，看mac地址，跟内网地址配对的那个mac地址，对应的是实验端口，另外实验cloudlab页面的manifest里面也能看到mac地址，那就是实验端口的。
+三个指令：ip addr; ibstat; ibv_devinfo
 
 
+问题：c6525-25g节点，用不了perftest
+备注：不知道为啥，这个节点的rdma似乎有问题，后来没再试过，不用，用别的

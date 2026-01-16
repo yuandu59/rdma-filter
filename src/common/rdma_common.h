@@ -3,11 +3,15 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <iostream>
 
 #include <infiniband/verbs.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#define MR_FLAGS_RW (IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_LOCAL_WRITE)
+#define MR_FLAGS_ATOMIC (IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_ATOMIC)
 
 struct rdma_conn_info {
     uint32_t qp_num;
@@ -38,5 +42,15 @@ int rdma_atomic_cas(ibv_qp *qp, int wr_id, ibv_sge *sge, ibv_cq *cq, uint64_t re
 ibv_context *open_rdma_ctx(const char* name_dev);
 
 rdma_conn_info *create_local_info(ibv_context *ctx, uint8_t port, uint8_t gid_index);
+
+template<typename T>
+T *create_rdma_conn_info(ibv_context *ctx, uint8_t port, uint8_t gid_index) {
+    T *local_info = (T *)malloc(sizeof(T));
+    local_info->psn = lrand48() & 0xffffff;
+    ibv_gid tmp_gid;
+    ibv_query_gid(ctx, port, gid_index, &tmp_gid);
+    memcpy(&local_info->gid, &tmp_gid, sizeof(ibv_gid));
+    return local_info;
+}
 
 #endif /* __RDMA_COMMON_H__ */

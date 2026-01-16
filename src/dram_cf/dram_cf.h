@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "hash.h"
+#include "utils.h"
 
 #define haszero4(x) (((x)-0x1111ULL) & (~(x)) & 0x8888ULL)
 #define hasvalue4(x, n) (haszero4((x) ^ (0x1111ULL * (n))))
@@ -21,18 +22,6 @@
 #define haszero16(x) (((x)-0x0001000100010001ULL) & (~(x)) & 0x8000800080008000ULL)
 #define hasvalue16(x, n) (haszero16((x) ^ (0x0001000100010001ULL * (n))))
 
-inline uint64_t upperpower2(uint64_t x)
-{
-    x--;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    x |= x >> 32;
-    x++;
-    return x;
-}
 
 // the most naive table implementation: one huge bit array
 template <size_t bits_per_tag> class SingleTable
@@ -302,6 +291,16 @@ template <size_t bits_per_tag> class SingleTable
         }
         return num;
     }
+
+    inline size_t NumTagsInTable() const
+    {
+        size_t num = 0;
+        for (size_t i = 0; i < num_buckets_; i++)
+        {
+            num += NumTagsInBucket(i);
+        }
+        return num;
+    }
 };
 
 // status returned by a cuckoo filter operation
@@ -432,6 +431,16 @@ class CuckooFilter
     size_t SizeInBytes() const
     {
         return table_->SizeInBytes();
+    }
+
+    size_t NumTagsInTable() const
+    {
+        return table_->NumTagsInTable();
+    }
+
+    size_t getNum_items_() const
+    {
+        return num_items_;
     }
 };
 
