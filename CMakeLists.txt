@@ -6,6 +6,7 @@ project(RDMA_FILTER)
 
 option(TOGGLE_RDMA "enable rdma" ON)
 option(TOGGLE_LOCK_FREE "enable lock-free" OFF)
+option (TOGGLE_HUGEPAGE "enable hugepage allocation" OFF)
 
 add_subdirectory(src)
 add_subdirectory(test)

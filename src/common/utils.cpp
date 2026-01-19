@@ -4,6 +4,12 @@
 // #include <openssl/rand.h>
 #include <cstring>
 #include <stdexcept>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <errno.h>
+#include <ctime>
+#include <iostream>
 #include "utils.h"
 
 std::vector<uint64_t> GenerateRandom64Cuckoo(std::size_t count) {
@@ -117,4 +123,47 @@ std::string get_current_time_string() {
     char buf[100];
     std::strftime(buf, sizeof(buf), "[%Y-%m-%d %H:%M:%S]", std::localtime(&now));
     return std::string(buf);
+}
+
+// 2MB per hugepage
+void hugepage_alloc(void** ptr, uint64_t const size) {
+    assert_else(size % (1 << 21) == 0, "Hugepage size must be multiple of 2MB");
+    
+    // 使用进程ID和时间戳创建唯一文件名，避免多进程冲突
+    char filename[256];
+    snprintf(filename, sizeof(filename), "/mnt/huge/rdma_filter_hugepage_%d_%ld", getpid(), time(NULL));
+    
+    // 先删除可能存在的旧文件
+    unlink(filename);
+    
+    int fd = open(filename, O_CREAT | O_RDWR | O_EXCL, 0600);
+    if (fd < 0) {
+        std::cerr << "Failed to open hugepage file: " << filename << ", errno: " << errno << " (" << strerror(errno) << ")" << std::endl;
+        assert_else(false, "Failed to open hugepage file");
+    }
+    
+    if (ftruncate(fd, size) != 0) {
+        std::cerr << "ftruncate failed for hugepage file, errno: " << errno << " (" << strerror(errno) << ")" << std::endl;
+        close(fd);
+        unlink(filename);
+        assert_else(false, "ftruncate failed for hugepage file");
+    }
+
+    *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    if (*ptr == MAP_FAILED) {
+        std::cerr << "mmap failed for hugepage file, errno: " << errno << " (" << strerror(errno) << ")" << std::endl;
+        std::cerr << "Requested size: " << size << " bytes (" << (size >> 21) << " hugepages)" << std::endl;
+        close(fd);
+        unlink(filename);
+        assert_else(false, "mmap failed for hugepage file");
+    }
+    
+    memset(*ptr, 0, size);
+    close(fd);
+    
+    // 删除文件，但内存映射仍然有效
+    unlink(filename);
+    
+    std::cout << "[Hugepage] Successfully allocated " << (size >> 21) << " hugepages (" << (size >> 20) << " MB)" << std::endl;
+    return;
 }

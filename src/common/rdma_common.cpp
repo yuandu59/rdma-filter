@@ -105,9 +105,13 @@ int rdma_one_side(ibv_qp *qp, int wr_id, ibv_sge *sge, uint64_t remote_addr, uin
 
 int check_cq(ibv_cq *cq, int wr_id) {
     ibv_wc wc;
-    while (ibv_poll_cq(cq, wr_id, &wc) < 1);
+    while (ibv_poll_cq(cq, 1, &wc) < 1);
     if (wc.status != IBV_WC_SUCCESS) {
         assert_else(false, "RDMA READ failed: " + std::string(ibv_wc_status_str(wc.status)));
+        return 0;
+    }
+    if (wc.wr_id != (uint64_t)wr_id) {
+        assert_else(false, "Mismatch wr_id: " + std::to_string(wc.wr_id) + " expected wr_id: " + std::to_string(wr_id));
         return 0;
     }
     return 1;
@@ -137,9 +141,13 @@ int rdma_atomic_cas(ibv_qp *qp, int wr_id, ibv_sge *sge, ibv_cq *cq, uint64_t re
             assert_else(false, "ibv_post_send (CAS lock) failed");
             return 0;
         }
-        while (ibv_poll_cq(cq, wr_id, &wc) < 1);
+        while (ibv_poll_cq(cq, 1, &wc) < 1);
         if (wc.status != IBV_WC_SUCCESS) {
             assert_else(false, "CAS lock failed: " + std::string(ibv_wc_status_str(wc.status)));
+            return 0;
+        }
+        if (wc.wr_id != (uint64_t)wr_id) {
+            assert_else(false, "Mismatch wr_id in CAS: " + std::to_string(wc.wr_id) + " expected wr_id: " + std::to_string(wr_id));
             return 0;
         }
         // 如果返回值为 compare_add，说明成功获取锁

@@ -15,6 +15,7 @@ python scripts/test.py deploy; python scripts/test.py run
 python scripts/test.py collect
 python scripts/test.py stop
 python scripts/test.py compile -DTOGGLE_LOCK_FREE=ON
+python scripts/test.py compile -DTOGGLE_HUGEPAGE=ON
 python scripts/test.py perftest
 
 ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode352.clemson.cloudlab.us
@@ -32,6 +33,7 @@ sudo apt install cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs
 ib_send_bw -d mlx4_0 -i 2
 ib_send_bw -d mlx4_0 -i 2               10.10.1.1
 ib_send_bw -d mlx4_0 -i 2 -D 4 -s 65536 10.10.1.1
+ping 10.10.1.1
 
 tmux new -s exp_srv
 tmux new -s exp_cli
@@ -46,8 +48,6 @@ tmux new -s t1
 tmux ls
 tmux attach -t t1
 tmux kill-session -t t1
-
-ping 10.10.1.1
 
 
 查看NAT地址
@@ -119,3 +119,8 @@ ibm8335, r7525, r650, r6525, nvidiagh, r6615
 
 问题：c6525-25g节点，用不了perftest
 备注：不知道为啥，这个节点的rdma似乎有问题，后来没再试过，不用，用别的
+
+
+# 思考
+
+rdma设计模式比如qp，cq等等，都是异步思维，然而现在我在把他当成同步在用。

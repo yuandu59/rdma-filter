@@ -22,8 +22,8 @@
 #define BLOCK_SIZE (4)
 #define MUTEX_GRAN_BLOCK (256)
 
-#define LOOKUP_COUNT (1 << 16)
-#define REAL_INSERT_COUNT (1 << 26)
+#define LOOKUP_COUNT (1 << 24)
+#define REAL_INSERT_COUNT (1 << 24)
 
 #define BITS_PER_TAG_CF (16)
 #define K_MAX_KICK_CF (10)
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 
     std::cout << "==== Experiment Begin ====" << std::endl;
     std::cout << "Current Time: " << get_current_time_string() << std::endl;
-    int false_positive_count = 0, true_positive_count = 0, true_negative_count = 0;
+    int false_positive_count = 0, true_positive_count = 0, true_negative_count = 0, insert_count = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = start_time;
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
@@ -214,9 +214,7 @@ int main(int argc, char **argv) {
     sync_client(cli.sockfd);
     start_time = std::chrono::high_resolution_clock::now();
     for (auto i : to_insert) {
-        if (Ok != RdmaCF_Cli_insert(&cli, i)) {
-            std::cout << "Fail Insert(index): " << i << std::endl;
-        }
+        if (Ok == RdmaCF_Cli_insert(&cli, i)) insert_count++;
 
         // debug
         // exit(0);
@@ -225,10 +223,10 @@ int main(int argc, char **argv) {
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
     std::cout << "Inserted " << REAL_INSERT_COUNT << " items." << std::endl;
     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-
     std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    // std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
-
+    std::cout << "Really inserted count: " << insert_count << std::endl;
+    std::cout << "Really inserted rate: " << 1.0 * insert_count / REAL_INSERT_COUNT << std::endl;
+    
     std::cout << std::endl << "= Lookingup existing items =" << std::endl;
     sync_client(cli.sockfd);
     start_time = std::chrono::high_resolution_clock::now();
@@ -271,13 +269,14 @@ int main(int argc, char **argv) {
     sync_client(cli.sockfd);
     start_time = std::chrono::high_resolution_clock::now();
     for (auto i : to_insert) {
-        if (Ok != RdmaCF_Cli_delete(&cli, i)) {
-            std::cout << "Fail Delete(index): " << i << std::endl;
+        Status ret = RdmaCF_Cli_delete(&cli, i);
+        if (Ok != ret) {
+            std::cout << "Fail Delete result: " << ret << " index: " << i << std::endl;
         }
     }
     end_time = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << REAL_INSERT_COUNT << " non-existing items." <<  std::endl;
+    std::cout << "Deleted " << REAL_INSERT_COUNT << " items." <<  std::endl;
     std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
     std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
     

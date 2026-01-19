@@ -166,48 +166,30 @@ Status RdmaCF_Cli_lookup(struct RdmaCF_Cli *cli, uint64_t key) {
     uint16_t tag;
     RdmaCF_Cli_generate_index_tag_hash(cli, key, index1, tag);
     index2 = RdmaCF_Cli_get_alternate_index(cli, index1, tag);
-
-    // debug
-    // assert_else(false, "[DEBUG] Lookup index1: " + std::to_string(index1) + ", index2: " + std::to_string(index2) + ", tag: " + std::to_string(tag));
+    if (index1 > index2) std::swap(index1, index2);
+    // 检查两个bucket是否共享同一把锁
+    bool same_lock = (index1 / cli->mutex_gran_bucket) == (index2 / cli->mutex_gran_bucket);
 
     RdmaCF_Cli_lock_victim(cli);
     RdmaCF_Cli_read_victim(cli);
     found = cli->buf_victim->used && cli->buf_victim->tag == tag &&
             (cli->buf_victim->index == index1 || cli->buf_victim->index == index2);
     RdmaCF_Cli_unlock_victim(cli);
-
-    // debug
-    // assert_else(found == false, "[DEBUG] found in victim.");
-
     if (found) return Ok;
-
-    // debug
-    // assert_else(false, "[DEBUG] Not found in victim.");
 
     RdmaCF_Cli_lock_bucket(cli, index1, 0);
     RdmaCF_Cli_read_bucket(cli, index1, 0);
     found = RdmaCF_Cli_find_tag(cli, tag, 0);
     if (found) {
         RdmaCF_Cli_unlock_bucket(cli, index1, 0);
-
-        // debug
-        // assert_else(false, "[DEBUG] found in index1.");
-
         return Ok;
     }
 
-    // debug
-    // assert_else(false, "[DEBUG] Not found in index1.");
-
-    RdmaCF_Cli_lock_bucket(cli, index2, 1);
+    if (!same_lock) RdmaCF_Cli_lock_bucket(cli, index2, 1);
     RdmaCF_Cli_read_bucket(cli, index2, 1);
     found = RdmaCF_Cli_find_tag(cli, tag, 1);
     RdmaCF_Cli_unlock_bucket(cli, index1, 0);
-    RdmaCF_Cli_unlock_bucket(cli, index2, 1);
-
-    // debug
-    // assert_else(found == false, "[DEBUG] found in index2.");
-    // assert_else(found == true, "[DEBUG] not found in index2.");
+    if (!same_lock) RdmaCF_Cli_unlock_bucket(cli, index2, 1);
 
     if (found) return Ok;
     else return NotFound;
@@ -219,6 +201,9 @@ Status RdmaCF_Cli_delete(struct RdmaCF_Cli *cli, uint64_t key) {
     bool found = false, access2 = false;
     RdmaCF_Cli_generate_index_tag_hash(cli, key, index1, tag);
     index2 = RdmaCF_Cli_get_alternate_index(cli, index1, tag);
+    if (index1 > index2) std::swap(index1, index2);
+    // 检查两个bucket是否共享同一把锁
+    bool same_lock = (index1 / cli->mutex_gran_bucket) == (index2 / cli->mutex_gran_bucket);
 
     RdmaCF_Cli_lock_bucket(cli, index1, 0);
     RdmaCF_Cli_read_bucket(cli, index1, 0);
@@ -228,7 +213,7 @@ Status RdmaCF_Cli_delete(struct RdmaCF_Cli *cli, uint64_t key) {
     }
     if (false == found) {
         access2 = true;
-        RdmaCF_Cli_lock_bucket(cli, index2, 1);
+        if (!same_lock) RdmaCF_Cli_lock_bucket(cli, index2, 1);
         RdmaCF_Cli_read_bucket(cli, index2, 1);
         if (RdmaCF_Cli_delete_tag(cli, tag, 1)) {
             found = true;
@@ -247,7 +232,7 @@ Status RdmaCF_Cli_delete(struct RdmaCF_Cli *cli, uint64_t key) {
         }
         RdmaCF_Cli_unlock_victim(cli);
         RdmaCF_Cli_unlock_bucket(cli, index1, 0);
-        if (access2) RdmaCF_Cli_unlock_bucket(cli, index2, 1);
+        if (access2 && !same_lock) RdmaCF_Cli_unlock_bucket(cli, index2, 1);
         return Ok;
     }
     
@@ -259,7 +244,7 @@ Status RdmaCF_Cli_delete(struct RdmaCF_Cli *cli, uint64_t key) {
     }
     RdmaCF_Cli_unlock_victim(cli);
     RdmaCF_Cli_unlock_bucket(cli, index1, 0);
-    if (access2) RdmaCF_Cli_unlock_bucket(cli, index2, 1);
+    if (access2 && !same_lock) RdmaCF_Cli_unlock_bucket(cli, index2, 1);
     if (found) return Ok;
     return NotFound;
 }
@@ -360,7 +345,6 @@ int RdmaCF_Cli_lock_bucket(struct RdmaCF_Cli *cli, uint32_t index_bucket, int in
 #ifndef TOGGLE_LOCK_FREE
     uint64_t addr_mutex = cli->remote_info.mutex_addr + (index_bucket / cli->mutex_gran_bucket) * sizeof(uint64_t);
     auto res_cas = rdma_atomic_cas(cli->qp, 100, cli->list_sge_mutex[index_buf_bucket], cli->cq, addr_mutex, cli->remote_info.mutex_rkey, 0, 1);
-    assert_else(res_cas == 1, "Failed to lock bucket mutex");
 
     // debug
     assert_else(res_cas == 1, "Failed to lock bucket mutex index: " + std::to_string(index_bucket));
@@ -408,6 +392,7 @@ void RdmaCF_Srv_init(struct RdmaCF_Srv *srv, unsigned int num_keys, unsigned int
     srv->count_clients_expected = client_count;
     srv->list_sockfd = std::vector<int>(client_count);
     srv->list_remote_info = std::vector<rdma_conn_info_cf>(client_count);
+    srv->use_hp = false;
     
     // size_data
     size_t count_buckets = upperpower2(std::max<uint64_t>(1, num_keys / TAGS_PER_BUCKET));
@@ -424,7 +409,17 @@ void RdmaCF_Srv_init(struct RdmaCF_Srv *srv, unsigned int num_keys, unsigned int
 #endif
 
     // allocate space
+#ifdef TOGGLE_HUGEPAGE
+    if (srv->size_data > 0 && srv->size_data % (1 << 21) == 0) {
+        hugepage_alloc((void**)&(srv->data), srv->size_data);
+        srv->use_hp = true;
+    }
+    else {
+        alloc_aligned_64((void**)&srv->data, srv->size_data);
+    }
+#else
     alloc_aligned_64((void**)&srv->data, srv->size_data);
+#endif
     alloc_aligned_64((void**)&srv->mutex_list, srv->count_mutex * sizeof(uint64_t));
     alloc_aligned_64((void**)&srv->victim, sizeof(victim_entry));
     alloc_aligned_64((void**)&srv->mutex_victim, sizeof(uint64_t));
@@ -435,15 +430,11 @@ void RdmaCF_Srv_init(struct RdmaCF_Srv *srv, unsigned int num_keys, unsigned int
     // out print
     std::cout << "[Server] Cuckoo Filter size(MB): " << srv->size_data / 1024.0 / 1024.0 << std::endl;
     std::cout << "[Server] Mutex list size(KB): " << srv->count_mutex * sizeof(uint64_t) / 1024.0 << std::endl;
+    std::cout << "[Server] Expected client count: " << client_count << std::endl;
+    if (srv->use_hp) std::cout << "[Server] Hugepage enabled for data region." << std::endl;
 
     // connect
     RdmaCF_Srv_conn(srv, client_count, name_dev, rnic_port, tcp_port, gid_index);
-
-    // debug
-    for (int i = 0; i < client_count; ++i) {
-        std::cout << "[Server] Client " << i << " QP num: " << srv->list_remote_info[i].qp_num << std::endl;
-        std::cout << "[Server] " << i << " client pairred qp num: " << srv->list_qp[i]->qp_num << std::endl;
-    }
     return;
 }
 
@@ -501,11 +492,14 @@ void RdmaCF_Srv_destroy(struct RdmaCF_Srv *srv) {
     if(srv->mutex_mr)           ibv_dereg_mr(srv->mutex_mr);
     if(srv->victim_mr)          ibv_dereg_mr(srv->victim_mr);
     if(srv->mutex_victim_mr)    ibv_dereg_mr(srv->mutex_victim_mr);
-    if(srv->data)           free(srv->data);
-    if(srv->mutex_list)     free(srv->mutex_list);
-    if(srv->victim)         free(srv->victim);
-    if(srv->mutex_victim)   free(srv->mutex_victim);
     if(srv->cq)     ibv_destroy_cq(srv->cq);
     if(srv->pd)     ibv_dealloc_pd(srv->pd);
     if(srv->ctx)    ibv_close_device(srv->ctx);
+    if(srv->data) {
+        if (srv->use_hp)    munmap(srv->data, srv->size_data);
+        else                free(srv->data);
+    }
+    if(srv->mutex_list)     free(srv->mutex_list);
+    if(srv->victim)         free(srv->victim);
+    if(srv->mutex_victim)   free(srv->mutex_victim);
 }

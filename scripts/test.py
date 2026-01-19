@@ -5,6 +5,8 @@ rnic_port = 1
 nat_ip = "10.10.1.1"
 count_clients = 2
 
+count_hugepages = 128  # INSERT_COUNT == 2 ^ 26 <==> size_data == 256 MB <==> 128 hugepages(2 MB)
+
 path_project = os.sep.join(["D:", "study", "rdma-filter"])
 path_list_machines = os.sep.join([path_project, "scripts", "list_machines.txt"])
 path_temp = os.sep.join([path_project, "scripts", "temp"])
@@ -111,7 +113,7 @@ if __name__ == "__main__":
         ])
         for machine in list_machines:
             pass
-        #     ssh_exec(machine, list_cmd_init)
+            ssh_exec(machine, list_cmd_init)
         with open(path_public_key_cloudlab) as f:
             pub_key_content = f.read()
         for machine in list_machines[1:]:
@@ -145,6 +147,7 @@ if __name__ == "__main__":
             list_cmake.insert(i - 1, str(sys.argv[i]))
         list_cmd_compile = CommandList([
             Command(["cd", "exp1/build"]),
+            Command(["rm", "-rf", "*"]),
             Command(list_cmake),
             Command(["make", ">>", "compile.log", "2>&1"])
         ])
@@ -154,13 +157,13 @@ if __name__ == "__main__":
             os.sep.join([path_project, "CMakeLists.txt"])], "exp1")
         ssh_exec(list_machines[0], list_cmd_compile)
         scp_recv_single(list_machines[0], "exp1/build/compile.log", os.sep.join([path_output, "compile.log"]))
-    
+
     elif sys.argv[1] == "deploy":
         for machine in list_machines[1:]:
             ssh_exec(list_machines[0], CommandList([
                 Command(["scp", "-r", "-o", "StrictHostKeyChecking=no", "-i", ".ssh/cloudlab", "exp1/build", f"{machine}:exp1/"]),
             ]))
-    
+
     elif sys.argv[1] == "run":
         cmd_server_run = Command(["./exp1/build/test/2_srv", ">", "out.log", "2>&1"])
         cmd_client_run = Command(["./exp1/build/test/2_cli", ">", "out.log", "2>&1"])
@@ -177,6 +180,7 @@ if __name__ == "__main__":
                 print(f"Received machine {i} failed: {e}")
             else:
                 print(f"Received machine {i}.")
+        print(f"Collect completed. Current Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     
     elif sys.argv[1] == "stop":
         for machine in list_machines:
@@ -204,6 +208,18 @@ if __name__ == "__main__":
         ])
         for machine in list_machines:
             ssh_exec(machine, list_cmd_user_clear)
+
+    elif sys.argv[1] == "init_hugepage":
+        list_cmd_hugepages = CommandList([
+            Command(["bash", "-c", f"'echo {count_hugepages} | sudo tee /proc/sys/vm/nr_hugepages'"]),
+            Command(["grep", "Huge", "/proc/meminfo"]),
+            Command(["sudo", "mkdir", "-p", "/mnt/huge"]),
+            Command(["sudo", "umount", "/mnt/huge", "2>/dev/null", "||", "true"]),  # 先卸载，忽略错误
+            Command(["sudo", "mount", "-t", "hugetlbfs", "-o", "pagesize=2M", "none", "/mnt/huge"]),
+            Command(["sudo", "chmod", "777", "/mnt/huge"]),  # 给予写权限
+            Command(["mount", "|", "grep", "huge"]),  # 验证挂载
+        ])
+        ssh_exec(list_machines[0], list_cmd_hugepages)
 
     elif sys.argv[1] == "test":
         pass

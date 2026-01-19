@@ -103,4 +103,6 @@ void tcp_exchange_client(uint32_t const &tcp_port, const char* server_ip, int co
 
 std::string get_current_time_string();
 
+void hugepage_alloc(void** ptr, uint64_t const size);
+
 #endif /* __UTILS_H__ */

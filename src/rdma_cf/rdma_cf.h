@@ -137,6 +137,8 @@ struct RdmaCF_Srv {
 
 	std::vector<int> list_sockfd;
 	std::vector<rdma_conn_info_cf> list_remote_info;
+
+    bool use_hp;
 };
 
 void RdmaCF_Srv_init(struct RdmaCF_Srv *srv, unsigned int num_keys, unsigned int bits_per_tag, uint32_t mutex_gran_bucket, int client_count, const char* name_dev, uint8_t rnic_port, uint32_t tcp_port, uint8_t gid_index);
