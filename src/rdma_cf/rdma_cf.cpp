@@ -1,3 +1,5 @@
+#include <sys/mman.h>
+
 #include "rdma_cf.h"
 #include "utils.h"
 

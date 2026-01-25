@@ -105,24 +105,29 @@ int RdmaBF_Cli_insert(struct RdmaBF_Cli *rdma_bf, uint64_t key) {
         uint32_t mutex_offset = byte_offset / rdma_bf->mutex_gran;
         // std::cout << "k Round: " << i << " , byte_offset: " << byte_offset << " , bit_offset: " << bit_offset << std::endl;
 
+#ifndef TOGGLE_LOCK_FREE
     // 加锁（使用RDMA CAS原子操作）
     rdma_atomic_cas(rdma_bf->qp, 100, rdma_bf->mutex_sge, rdma_bf->cq, rdma_bf->remote_info.mutex_addr + mutex_offset * sizeof(uint64_t), rdma_bf->remote_info.mutex_rkey, 0, 1);
+#endif
 
     // RDMA READ
     rdma_one_side(rdma_bf->qp, 1, rdma_bf->buffer_sge, rdma_bf->remote_info.remote_addr + byte_offset, rdma_bf->remote_info.rkey, IBV_WR_RDMA_READ);
     check_cq(rdma_bf->cq, 1);
 
     // Modify in place
-    bit_set(rdma_bf->local_buf, bit_offset);
+    if (!bit_get(rdma_bf->local_buf, bit_offset)) {
+        bit_set(rdma_bf->local_buf, bit_offset);
+        // RDMA WRITE
+        rdma_one_side(rdma_bf->qp, 2, rdma_bf->buffer_sge, rdma_bf->remote_info.remote_addr + byte_offset, rdma_bf->remote_info.rkey, IBV_WR_RDMA_WRITE);
+        check_cq(rdma_bf->cq, 2);
+    }
 
-    // RDMA WRITE
-    rdma_one_side(rdma_bf->qp, 2, rdma_bf->buffer_sge, rdma_bf->remote_info.remote_addr + byte_offset, rdma_bf->remote_info.rkey, IBV_WR_RDMA_WRITE);
-    check_cq(rdma_bf->cq, 2);
-
+#ifndef TOGGLE_LOCK_FREE
     // 解锁（不使用CAS原子操作）
     *(uint64_t*)rdma_bf->mutex_buf = 0;  // 设置交换值为0（解锁）
     rdma_one_side(rdma_bf->qp, 101, rdma_bf->mutex_sge, rdma_bf->remote_info.mutex_addr + mutex_offset * sizeof(uint64_t), rdma_bf->remote_info.mutex_rkey, IBV_WR_RDMA_WRITE);
     check_cq(rdma_bf->cq, 101);
+#endif
     }
     return 1;
 }
@@ -139,8 +144,10 @@ int RdmaBF_Cli_lookup(struct RdmaBF_Cli *rdma_bf, uint64_t key) {
         uint32_t mutex_offset = byte_offset / rdma_bf->mutex_gran;
         // std::cout << "k Round: " << i << " , byte_offset: " << byte_offset << " , bit_offset: " << bit_offset << std::endl;
 
+#ifndef TOGGLE_LOCK_FREE
     // 加锁（使用RDMA CAS原子操作）
     rdma_atomic_cas(rdma_bf->qp, 100, rdma_bf->mutex_sge, rdma_bf->cq, rdma_bf->remote_info.mutex_addr + mutex_offset * sizeof(uint64_t), rdma_bf->remote_info.mutex_rkey, 0, 1);
+#endif
 
     // RDMA READ
     rdma_one_side(rdma_bf->qp, 1, rdma_bf->buffer_sge, rdma_bf->remote_info.remote_addr + byte_offset, rdma_bf->remote_info.rkey, IBV_WR_RDMA_READ);
@@ -154,10 +161,12 @@ int RdmaBF_Cli_lookup(struct RdmaBF_Cli *rdma_bf, uint64_t key) {
         flag_found = 0;
     }
 
+#ifndef TOGGLE_LOCK_FREE
     // 解锁（不使用RDMA原子操作）
     *(uint64_t*)rdma_bf->mutex_buf = 0;  // 设置交换值为0（解锁）
     rdma_one_side(rdma_bf->qp, 101, rdma_bf->mutex_sge, rdma_bf->remote_info.mutex_addr + mutex_offset * sizeof(uint64_t), rdma_bf->remote_info.mutex_rkey, IBV_WR_RDMA_WRITE);
     check_cq(rdma_bf->cq, 101);
+#endif
 
     if (!flag_found) break;
     }
@@ -174,7 +183,11 @@ void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int
     rdma_bf->mutex_gran = mutex_gran;
     rdma_bf->count_clients_expected = client_count;
 
+#ifndef TOGGLE_LOCK_FREE
     uint32_t count_mutex = (rdma_bf->m >> 3) / mutex_gran + 1;
+#else
+    uint32_t count_mutex = 1;
+#endif
 
     // 初始化 bit_vector 和 mutex_list
     rdma_bf->bit_vector = (uint8_t *)calloc(rdma_bf->m >> 3, sizeof(uint8_t));
@@ -184,8 +197,8 @@ void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int
     memset(rdma_bf->mutex_list, 0, count_mutex * sizeof(uint64_t));
     std::cout << "[Server] BF size(MB): " << rdma_bf->m / 8 / 1024 / 1024 << std::endl;
     std::cout << "[Server] Mutex list size(KB): " << count_mutex * sizeof(uint64_t) / 1024 << std::endl;
-    // 初始化 sockfd_list 和 remote_info_list
-    rdma_bf->sockfd_list = (int *)calloc(client_count, sizeof(int));
+    // 初始化 list_sockfd 和 remote_info_list
+    rdma_bf->list_sockfd = std::vector<int>(client_count);
     rdma_bf->remote_info_list = (rdma_conn_info *)calloc(client_count, sizeof(rdma_conn_info));
 
     // 打开 ctx 并创建 pd 和 cq
@@ -233,7 +246,7 @@ void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int
     for (int i = 0; i < client_count; i++) {
         int client_fd = accept(listen_fd, NULL, NULL);
         assert_else(client_fd >= 0, "accept failed");
-        rdma_bf->sockfd_list[i] = client_fd;
+        rdma_bf->list_sockfd[i] = client_fd;
         local_info->qp_num = rdma_bf->qp_list[i]->qp_num;
         reliable_send(client_fd, local_info, sizeof(rdma_conn_info));
         reliable_recv(client_fd, &rdma_bf->remote_info_list[i], sizeof(rdma_conn_info));
@@ -248,7 +261,7 @@ void RdmaBF_Srv_init(struct RdmaBF_Srv *rdma_bf, unsigned int n, double fpr, int
     }
 
     for (int i = 0; i < client_count; i++) {
-        reliable_send(rdma_bf->sockfd_list[i], "READY", 6);
+        reliable_send(rdma_bf->list_sockfd[i], "READY", 6);
     }
     std::cout << "[Server] Initialization successfully!" << std::endl;
     return;
@@ -268,9 +281,8 @@ void RdmaBF_Srv_destroy(struct RdmaBF_Srv *rdma_bf) {
 
     if (rdma_bf->qp_list) free(rdma_bf->qp_list);
     for (int i = 0; i < rdma_bf->count_clients_expected; i++) {
-        if (rdma_bf->sockfd_list[i]) close(rdma_bf->sockfd_list[i]);
+        if (rdma_bf->list_sockfd[i]) close(rdma_bf->list_sockfd[i]);
     }
-    if (rdma_bf->sockfd_list) free(rdma_bf->sockfd_list);
     if (rdma_bf->remote_info_list) free(rdma_bf->remote_info_list);
 }
 

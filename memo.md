@@ -14,8 +14,13 @@ python scripts/test.py compile
 python scripts/test.py deploy; python scripts/test.py run
 python scripts/test.py collect
 python scripts/test.py stop
-python scripts/test.py compile -DTOGGLE_LOCK_FREE=ON
-python scripts/test.py compile -DTOGGLE_HUGEPAGE=ON
+
+python scripts/test.py compile -DSWITCH_EXP=rdma_bf
+python scripts/test.py compile -DSWITCH_EXP=rdma_bbf
+python scripts/test.py compile -DSWITCH_EXP=rdma_ohbbf
+python scripts/test.py compile -DSWITCH_EXP=rdma_cf
+python scripts/test.py compile -DSWITCH_EXP=rdma_cf -DTOGGLE_LOCK_FREE=ON
+python scripts/test.py compile -DSWITCH_EXP=rdma_cf -DTOGGLE_HUGEPAGE=ON
 python scripts/test.py perftest
 
 ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode352.clemson.cloudlab.us

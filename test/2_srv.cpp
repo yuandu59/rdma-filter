@@ -34,43 +34,52 @@ int main(int argc, char **argv) {
     std::cout << "==== Experiment Begin ====" << std::endl;
     std::cout << "Current Time: " << get_current_time_string() << std::endl;
 
-// ----------------------------------------------------------------------------------------------
+#ifdef EXP_RDMA_BF
 
-    // struct RdmaBF_Srv srv;
-    // RdmaBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN);
+    std::cout << "=== RdmaBF Experiment ===" << std::endl;
+    struct RdmaBF_Srv srv;
+    RdmaBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    for (int i = 0; i < count_clients; i++) {
+        reliable_recv(srv.list_sockfd[i], cmd, 5);
+        std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
+    }
 
-    // for (int i = 0; i < count_clients; i++) {
-    //     reliable_recv(srv.sockfd_list[i], cmd, 5);
-    //     std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
-    // }
+    RdmaBF_Srv_destroy(&srv);
 
-    // RdmaBF_Srv_destroy(&srv);
+#elif defined(EXP_RDMA_BBF)
 
-// ----------------------------------------------------------------------------------------------
+    std::cout << "=== RdmaBBF Experiment ===" << std::endl;
+    struct RdmaBBF_Srv srv;
+    RdmaBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    for (int i = 0; i < count_clients; i++) {
+        reliable_recv(srv.list_sockfd[i], cmd, 5);
+        std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
+    }
+    RdmaBBF_Srv_destroy(&srv);
 
-            // struct RdmaBBF_Srv srv;
-            // RdmaBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
+#elif defined(EXP_RDMA_OHBBF)
 
-            // for (int i = 0; i < count_clients; i++) {
-            //     reliable_recv(srv.sockfd_list[i], cmd, 5);
-            //     std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
-            // }
+    std::cout << "=== RdmaOHBBF Experiment ===" << std::endl;
+    struct RdmaOHBBF_Srv srv;
+    RdmaOHBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    sync_server(srv.list_sockfd);
+    for (int i = 0; i < count_clients; i++) {
+        reliable_recv(srv.list_sockfd[i], cmd, 5);
+        std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
+    }
+    RdmaOHBBF_Srv_destroy(&srv);
 
-            // RdmaBBF_Srv_destroy(&srv);
+#elif defined(EXP_RDMA_CF)
 
-// ----------------------------------------------------------------------------------------------
-
-    // struct RdmaOHBBF_Srv srv;
-    // RdmaOHBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
-
-    // for (int i = 0; i < count_clients; i++) {
-    //     reliable_recv(srv.sockfd_list[i], cmd, 5);
-    //     std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
-    // }
-
-    // RdmaOHBBF_Srv_destroy(&srv);
-
-// ----------------------------------------------------------------------------------------------
+    std::cout << "=== RdmaCF Experiment ===" << std::endl;
     struct RdmaCF_Srv srv;
     RdmaCF_Srv_init(&srv, INSERT_COUNT, BITS_PER_TAG_CF, MUTEX_GRAN_BUCKET_CF, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX);
     
@@ -86,8 +95,8 @@ int main(int argc, char **argv) {
         std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
     }
     RdmaCF_Srv_destroy(&srv);
+#endif
 
-// ----------------------------------------------------------------------------------------------
     std::cout << "==== Experiment End ====" << std::endl;
     std::cout << "Current Time: " << get_current_time_string() << std::endl;
     return 0;

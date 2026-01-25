@@ -53,6 +53,20 @@ if (TOGGLE_RDMA)
     )
     target_compile_options(2_srv PRIVATE -Ofast)
 
+    if (SWITCH_EXP STREQUAL "rdma_bf")
+        target_compile_definitions(2_cli PRIVATE EXP_RDMA_BF)
+        target_compile_definitions(2_srv PRIVATE EXP_RDMA_BF)
+    elseif (SWITCH_EXP STREQUAL "rdma_bbf")
+        target_compile_definitions(2_cli PRIVATE EXP_RDMA_BBF)
+        target_compile_definitions(2_srv PRIVATE EXP_RDMA_BBF)
+    elseif (SWITCH_EXP STREQUAL "rdma_ohbbf")
+        target_compile_definitions(2_cli PRIVATE EXP_RDMA_OHBBF)
+        target_compile_definitions(2_srv PRIVATE EXP_RDMA_OHBBF)
+    elseif (SWITCH_EXP STREQUAL "rdma_cf")
+        target_compile_definitions(2_cli PRIVATE EXP_RDMA_CF)
+        target_compile_definitions(2_srv PRIVATE EXP_RDMA_CF)
+    endif()
+
     add_executable(3_cli_test "3_cli_test.cpp")
     target_link_libraries(3_cli_test PRIVATE
         header
@@ -66,11 +80,5 @@ if (TOGGLE_RDMA)
     )
     target_compile_options(3_cli_test PRIVATE -Ofast)
 
-    if(TOGGLE_LOCK_FREE)
-        target_compile_definitions(0_test       PUBLIC TOGGLE_LOCK_FREE)
-        target_compile_definitions(2_cli        PUBLIC TOGGLE_LOCK_FREE)
-        target_compile_definitions(2_srv        PUBLIC TOGGLE_LOCK_FREE)
-        target_compile_definitions(3_cli_test   PUBLIC TOGGLE_LOCK_FREE)
-    endif()
 
 endif()

@@ -3,7 +3,7 @@ import os, sys, subprocess, time
 rnic_name = "mlx5_0"
 rnic_port = 1
 nat_ip = "10.10.1.1"
-count_clients = 2
+count_clients = 1
 
 count_hugepages = 128  # INSERT_COUNT == 2 ^ 26 <==> size_data == 256 MB <==> 128 hugepages(2 MB)
 

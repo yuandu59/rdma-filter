@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-
+#include <vector>
 #include <infiniband/verbs.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -57,7 +57,7 @@ struct RdmaBF_Srv
     ibv_mr *mr;
     ibv_mr *mutex_mr;
 
-    int *sockfd_list;
+    std::vector<int> list_sockfd;
     int count_clients_expected;
     rdma_conn_info *remote_info_list;
 
