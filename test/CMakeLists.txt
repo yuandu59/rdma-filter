@@ -7,6 +7,7 @@ target_link_libraries(1_test PRIVATE
     drambf
     drambbf
     dramohbbf
+    dramqf
 )
 target_compile_options(1_test PRIVATE -Ofast)
 

@@ -1,0 +1,282 @@
+[INFO] [2026-04-16 22:15:13] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-16 22:15:13] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-16 22:18:54] [ssh_exec] failed: Command '['ssh', '-o', 'StrictHostKeyChecking=no', '-i', 'C:\\Users\\Yuandu\\.ssh\\id_rsa', 'yunchuan@clnode368.clemson.cloudlab.us', 'mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1']' returned non-zero exit status 100.
+[INFO] [2026-04-16 22:18:54] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-16 22:50:05] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-16 22:50:05] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-16 23:45:58] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-16 23:45:58] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 00:34:33] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 00:34:33] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 00:37:25] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 01:17:08] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 01:17:08] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 01:20:24] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 02:52:09] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 02:52:09] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 02:52:24] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 02:54:28] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-17 02:56:30] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:.ssh/authorized_keys D:\study\rdma-filter\scripts\temp
+[INFO] [2026-04-17 02:56:35] [init] Adding public key to yunchuan@clnode356.clemson.cloudlab.us's authorized_keys
+[INFO] [2026-04-17 02:56:35] [scp_send] Execute: scp -o StrictHostKeyChecking=no D:\study\rdma-filter\scripts\temp\authorized_keys yunchuan@clnode356.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-17 02:56:39] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:.ssh/authorized_keys D:\study\rdma-filter\scripts\temp
+[INFO] [2026-04-17 02:56:45] [init] Adding public key to yunchuan@clnode353.clemson.cloudlab.us's authorized_keys
+[INFO] [2026-04-17 02:56:45] [scp_send] Execute: scp -o StrictHostKeyChecking=no D:\study\rdma-filter\scripts\temp\authorized_keys yunchuan@clnode353.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-17 02:56:49] [scp_send] Execute: scp -o StrictHostKeyChecking=no C:\Users\Yuandu\.ssh\cloudlab yunchuan@clnode368.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-17 02:56:54] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us chmod 700 .ssh; chmod 600 .ssh/cloudlab
+[INFO] [2026-04-17 03:53:01] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 03:53:01] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us ip addr; ibstat; ibv_devinfo
+[INFO] [2026-04-17 03:53:04] [main] Done
+[INFO] [2026-04-17 03:57:28] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 03:57:28] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode368.clemson.cloudlab.us:exp1
+[INFO] [2026-04-17 03:58:05] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_bf .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-17 03:58:15] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-17 03:58:19] [main] Done
+[INFO] [2026-04-17 04:10:37] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:10:37] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode356.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-17 04:10:40] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode353.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-17 04:10:44] [main] Done
+[INFO] [2026-04-17 04:10:44] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:10:44] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-17 04:10:48] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-17 04:10:52] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-17 04:10:56] [main] Done
+[INFO] [2026-04-17 04:13:42] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:13:42] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 04:13:46] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 04:13:51] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 04:13:56] [main] Done
+[INFO] [2026-04-17 04:18:07] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:18:07] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 04:18:11] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 04:18:16] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 04:18:21] [main] Done
+[INFO] [2026-04-17 04:20:56] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:20:56] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 04:21:01] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 04:21:05] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 04:21:09] [main] Done
+[INFO] [2026-04-17 04:23:39] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 04:23:39] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 04:23:43] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 04:23:47] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 04:23:51] [main] Done
+[INFO] [2026-04-17 14:20:13] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 14:20:13] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 14:20:19] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 14:20:25] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 14:20:30] [main] Done
+[INFO] [2026-04-17 16:10:02] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-17 16:10:02] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-17 16:10:09] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-17 16:10:14] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-17 16:10:19] [main] Done
+[INFO] [2026-04-18 00:52:46] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-18 00:52:46] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-18 00:52:53] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-18 00:53:00] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-18 00:53:08] [main] Done
+[INFO] [2026-04-18 01:20:22] [main] 3 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-18 01:20:22] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us ip addr; ibstat; ibv_devinfo
+[INFO] [2026-04-18 01:20:27] [main] Done
+[INFO] [2026-04-18 12:05:17] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 12:05:17] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode368.clemson.cloudlab.us:exp1
+[INFO] [2026-04-18 12:05:53] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_bf -DTOGGLE_LOCK_FREE=ON .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-18 12:06:03] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-18 12:06:07] [main] Done
+[INFO] [2026-04-18 12:10:15] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 12:10:15] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode356.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-18 12:10:18] [main] Done
+[INFO] [2026-04-18 12:10:18] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 12:10:18] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode368.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-18 12:10:22] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode356.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-18 12:10:27] [main] Done
+[INFO] [2026-04-18 12:14:34] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 12:14:34] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-18 12:14:39] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-18 12:14:45] [main] Done
+[INFO] [2026-04-18 12:28:32] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 12:28:32] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-18 12:28:36] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-18 12:28:46] [main] Done
+[INFO] [2026-04-18 19:04:23] [main] 2 Machines: ['yunchuan@clnode368.clemson.cloudlab.us', 'yunchuan@clnode356.clemson.cloudlab.us']
+[INFO] [2026-04-18 19:04:23] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode368.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-18 19:04:28] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode356.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-18 19:04:34] [main] Done
+[INFO] [2026-04-22 23:02:02] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-22 23:02:02] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-22 23:05:33] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-22 23:38:03] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-22 23:38:03] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-22 23:46:40] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-22 23:46:40] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-22 23:46:51] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-22 23:48:41] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:.ssh/authorized_keys D:\study\rdma-filter\scripts\temp
+[INFO] [2026-04-22 23:48:47] [init] Adding public key to yunchuan@clnode364.clemson.cloudlab.us's authorized_keys
+[INFO] [2026-04-22 23:48:47] [scp_send] Execute: scp -o StrictHostKeyChecking=no D:\study\rdma-filter\scripts\temp\authorized_keys yunchuan@clnode364.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-22 23:48:58] [scp_send] Execute: scp -o StrictHostKeyChecking=no C:\Users\Yuandu\.ssh\cloudlab yunchuan@clnode330.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-22 23:49:09] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us chmod 700 .ssh; chmod 600 .ssh/cloudlab
+[INFO] [2026-04-22 23:49:13] [main] Done
+[INFO] [2026-04-23 00:24:40] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 00:24:40] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-23 00:24:47] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-23 00:24:55] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us mkdir exp1 > init.log 2>&1; mkdir exp1/build >> init.log 2>&1; sudo apt update >> init.log 2>&1; sudo apt install -y cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux >> init.log 2>&1
+[INFO] [2026-04-23 00:26:44] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:.ssh/authorized_keys D:\study\rdma-filter\scripts\temp
+[INFO] [2026-04-23 00:26:48] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:.ssh/authorized_keys D:\study\rdma-filter\scripts\temp
+[INFO] [2026-04-23 00:26:54] [init] Adding public key to yunchuan@clnode353.clemson.cloudlab.us's authorized_keys
+[INFO] [2026-04-23 00:26:54] [scp_send] Execute: scp -o StrictHostKeyChecking=no D:\study\rdma-filter\scripts\temp\authorized_keys yunchuan@clnode353.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-23 00:27:02] [scp_send] Execute: scp -o StrictHostKeyChecking=no C:\Users\Yuandu\.ssh\cloudlab yunchuan@clnode330.clemson.cloudlab.us:.ssh
+[INFO] [2026-04-23 00:27:09] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us chmod 700 .ssh; chmod 600 .ssh/cloudlab
+[INFO] [2026-04-23 00:27:16] [main] Done
+[INFO] [2026-04-23 01:39:01] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:39:01] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us ip addr; ibstat; ibv_devinfo
+[INFO] [2026-04-23 01:39:07] [main] Done
+[INFO] [2026-04-23 01:50:37] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:50:37] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-23 01:51:23] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_bbf .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-23 01:51:33] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-23 01:51:37] [main] Done
+[INFO] [2026-04-23 01:52:21] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:52:21] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 01:52:27] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode353.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 01:52:32] [main] Done
+[INFO] [2026-04-23 01:52:32] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:52:32] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-23 01:52:36] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 01:52:42] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 01:52:46] [main] Done
+[INFO] [2026-04-23 01:55:53] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:55:53] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-23 01:55:59] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-23 01:56:03] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-23 01:56:09] [main] Done
+[INFO] [2026-04-23 01:56:41] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:56:41] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true
+[INFO] [2026-04-23 01:56:44] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true
+[INFO] [2026-04-23 01:56:48] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true
+[INFO] [2026-04-23 01:56:54] [stop] All experiment tmux sessions killed.
+[INFO] [2026-04-23 01:56:54] [main] Done
+[INFO] [2026-04-23 01:57:23] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:57:23] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-23 01:57:53] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-23 01:58:05] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-23 01:58:09] [main] Done
+[INFO] [2026-04-23 01:58:12] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 01:58:12] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-23 01:58:44] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_bbf .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-23 01:58:54] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-23 01:59:00] [main] Done
+[INFO] [2026-04-23 02:01:40] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 02:01:40] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 02:01:44] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode353.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 02:01:49] [main] Done
+[INFO] [2026-04-23 02:01:49] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 02:01:49] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-23 02:01:52] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 02:01:57] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 02:02:02] [main] Done
+[INFO] [2026-04-23 02:10:11] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 02:10:11] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-23 02:10:16] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-23 02:10:20] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-23 02:10:24] [main] Done
+[INFO] [2026-04-23 15:11:22] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 15:11:22] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-23 15:11:30] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-23 15:11:39] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-23 15:11:44] [main] Done
+[INFO] [2026-04-23 15:33:06] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-23 15:33:06] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-23 15:34:03] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_bbf -DTOGGLE_LOCK_FREE=ON .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-23 15:34:16] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-23 15:34:23] [main] Done
+[INFO] [2026-04-23 15:34:47] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-23 15:34:47] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 15:34:50] [main] Done
+[INFO] [2026-04-23 15:34:50] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-23 15:34:50] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-23 15:34:57] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 15:35:06] [main] Done
+[INFO] [2026-04-23 15:47:40] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-23 15:47:40] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-23 15:47:46] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-23 15:47:55] [main] Done
+[INFO] [2026-04-23 17:49:30] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-23 17:49:30] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-23 17:49:35] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-23 17:49:40] [main] Done
+[INFO] [2026-04-23 21:57:17] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 21:57:17] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-23 21:58:03] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_ohbbf .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-23 21:58:14] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-23 21:58:25] [main] Done
+[INFO] [2026-04-23 21:58:42] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 21:58:42] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 21:58:50] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode353.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-23 21:58:56] [main] Done
+[INFO] [2026-04-23 21:58:56] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-23 21:58:56] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-23 21:59:01] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 21:59:06] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-23 21:59:13] [main] Done
+[INFO] [2026-04-24 01:25:51] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-24 01:25:51] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-24 01:26:00] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-24 01:26:05] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-24 01:26:12] [main] Done
+[INFO] [2026-04-24 04:36:50] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-24 04:36:50] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-24 04:37:27] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_ohbbf -DTOGGLE_LOCK_FREE=ON .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-24 04:37:40] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-24 04:37:45] [main] Done
+[INFO] [2026-04-24 04:37:57] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-24 04:37:57] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-24 04:38:00] [main] Done
+[INFO] [2026-04-24 04:38:00] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-24 04:38:00] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-24 04:38:04] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-24 04:38:08] [main] Done
+[INFO] [2026-04-24 14:38:09] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-24 14:38:09] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-24 14:38:16] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-24 14:38:21] [main] Done
+[INFO] [2026-04-26 03:00:05] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-26 03:00:05] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-26 03:00:41] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_cf .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-26 03:00:51] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-26 03:00:55] [main] Done
+[INFO] [2026-04-26 04:12:14] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-26 04:12:14] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-26 04:12:19] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode353.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-26 04:12:23] [main] Done
+[INFO] [2026-04-26 04:12:23] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-26 04:12:23] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-26 04:12:27] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-26 04:12:31] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode353.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-26 04:12:36] [main] Done
+[INFO] [2026-04-26 04:27:14] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-26 04:27:14] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-26 04:27:19] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-26 04:27:23] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-26 04:27:28] [main] Done
+[INFO] [2026-04-26 16:18:25] [main] 3 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us', 'yunchuan@clnode353.clemson.cloudlab.us']
+[INFO] [2026-04-26 16:18:25] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-26 16:18:30] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-26 16:18:36] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode353.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_2.log
+[INFO] [2026-04-26 16:18:43] [main] Done
+[INFO] [2026-04-26 16:21:53] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-26 16:21:53] [scp_send] Execute: scp -r -o StrictHostKeyChecking=no D:\study\rdma-filter\src D:\study\rdma-filter\test D:\study\rdma-filter\CMakeLists.txt yunchuan@clnode330.clemson.cloudlab.us:exp1
+[INFO] [2026-04-26 16:22:27] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us cd exp1/build; rm -rf *; cmake -DSWITCH_EXP=rdma_cf -DTOGGLE_LOCK_FREE=ON .. > compile.log 2>&1; make >> compile.log 2>&1
+[INFO] [2026-04-26 16:22:37] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:exp1/build/compile.log D:\study\rdma-filter\output\compile.log
+[INFO] [2026-04-26 16:22:42] [main] Done
+[INFO] [2026-04-26 16:27:06] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-26 16:27:06] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us scp -r -o StrictHostKeyChecking=no -i .ssh/cloudlab exp1/build yunchuan@clnode364.clemson.cloudlab.us:exp1/
+[INFO] [2026-04-26 16:27:10] [main] Done
+[INFO] [2026-04-26 16:27:10] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-26 16:27:10] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode330.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_srv > out.log 2>&1'
+[INFO] [2026-04-26 16:27:13] [ssh_exec] Execute: ssh -o StrictHostKeyChecking=no -i C:\Users\Yuandu\.ssh\id_rsa yunchuan@clnode364.clemson.cloudlab.us tmux kill-session -t exp 2>/dev/null || true; tmux new-session -d -s exp './exp1/build/test/2_cli > out.log 2>&1'
+[INFO] [2026-04-26 16:27:17] [main] Done
+[INFO] [2026-04-26 22:36:28] [main] 2 Machines: ['yunchuan@clnode330.clemson.cloudlab.us', 'yunchuan@clnode364.clemson.cloudlab.us']
+[INFO] [2026-04-26 22:36:28] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode330.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_0.log
+[INFO] [2026-04-26 22:36:36] [scp_recv_single] Execute: scp -o StrictHostKeyChecking=no yunchuan@clnode364.clemson.cloudlab.us:out.log D:\study\rdma-filter\output\out_1.log
+[INFO] [2026-04-26 22:36:41] [main] Done

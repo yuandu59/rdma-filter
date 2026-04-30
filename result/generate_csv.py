@@ -2,10 +2,23 @@ import re
 import csv
 
 in_path = 'src/temp/in.txt'
-out_path_1 = 'src/temp/out_dram_bf.csv'
-out_path_2 = 'src/temp/out_dram_bbf.csv'
-out_path_3 = 'src/temp/out_dram_ohbbf.csv'
-out_path_4 = 'src/temp/out_dram_cf.csv'
+in_path_01 = 'output/out_1.log'
+in_path_02 = 'output/out_2.log'
+in_path_03 = 'output/rdma-ohbbf-20round/out_2.log'
+in_path_04 = 'output/rdma-ohbbf-lockfree-20round/out_1.log'
+
+out_path_01 = 'src/temp/out_dram_bf.csv'
+out_path_02 = 'src/temp/out_dram_bbf.csv'
+out_path_03 = 'src/temp/out_dram_ohbbf.csv'
+out_path_04 = 'src/temp/out_dram_cf.csv'
+out_path_05 = 'result/out_rdma_bf_lockfree.csv'
+out_path_06 = 'result/out_rdma_bf.csv'
+out_path_07 = 'result/out_rdma_bbf.csv'
+out_path_08 = 'result/out_rdma_bbf_lockfree.csv'
+out_path_09 = 'result/out_rdma_cf.csv'
+out_path_10 = 'result/out_rdma_cf_lockfree.csv'
+out_path_11 = 'result/out_rdma_ohbbf.csv'
+out_path_12 = 'result/out_rdma_ohbbf_lockfree.csv'
 
 def handle_dram_bf(in_path, out_path):
     with open(in_path, 'r', encoding='utf-8') as infile:
@@ -70,86 +83,22 @@ def handle_dram_bf(in_path, out_path):
     else:
         print("未找到有效 DramBF 数据")
 
-def handle_dram_bbf(in_path, out_path):
-    with open(in_path, 'r', encoding='utf-8') as infile:
-        content = infile.read()
-    
-    # 提取 DramBBF 实验部分的内容
-    dram_bf_match = re.search(r'=== DramBBF Experiment ===\n(.*?)\n=== DramBBF Experiment End ===', content, re.DOTALL)
-    if not dram_bf_match:
-        print("未找到 DramBBF 实验数据")
-        return
-    
-    content = dram_bf_match.group(1)
-    
-    # 按负载百分比分割数据
-    load_sections = re.split(r'== When Load (\d+) percent elements ==', content)
-    
-    # 存储所有数据
-    data_rows = []
-    
-    # 处理每个负载阶段（跳过第一个空段）
-    for i in range(1, len(load_sections), 2):
-        load_percent = int(load_sections[i])
-        section_content = load_sections[i + 1]
-        
-        row_data = {'Load': load_percent}
-        
-        # 提取插入时间和吞吐量
-        insert_match = re.search(r'= Inserted (\d+) items =\s+Time\(s\): ([\d.e+-]+)\s+Throughput\(op/s\): ([\d.e+]+)', section_content)
-        if insert_match:
-            row_data['Inserted_Items'] = int(insert_match.group(1))
-            row_data['Insert_Time'] = float(insert_match.group(2))
-            row_data['Insert_Throughput'] = float(insert_match.group(3))
-        
-        # 提取已存在项的查找数据
-        existing_lookup = re.search(r'= Lookuped (\d+) existing items =\s+Time\(s\): ([\d.e+-]+)\s+Throughput\(op/s\): ([\d.e+-]+)\s+True Positive Count: (\d+)\s+True Positive Rate: ([\d.e+-]+)', section_content)
-        if existing_lookup:
-            row_data['Existing_Lookup_Items'] = int(existing_lookup.group(1))
-            row_data['Existing_Lookup_Time'] = float(existing_lookup.group(2))
-            row_data['Existing_Lookup_Throughput'] = float(existing_lookup.group(3))
-            row_data['True_Positive_Count'] = int(existing_lookup.group(4))
-            row_data['True_Positive_Rate'] = float(existing_lookup.group(5))
-        
-        # 提取不存在项的查找数据
-        non_existing_lookup = re.search(r'= Lookuped (\d+) non-existing items =\s+Time\(s\): ([\d.e+-]+)\s+Throughput\(op/s\): ([\d.e+-]+)\s+True Negative Count: (\d+)\s+True Negative Rate: ([\d.e+-]+)\s+False Positive Count: (\d+)\s+False Positive Rate: ([\d.e+-]+)', section_content)
-        if non_existing_lookup:
-            row_data['Non_Existing_Lookup_Items'] = int(non_existing_lookup.group(1))
-            row_data['Non_Existing_Lookup_Time'] = float(non_existing_lookup.group(2))
-            row_data['Non_Existing_Lookup_Throughput'] = float(non_existing_lookup.group(3))
-            row_data['True_Negative_Count'] = int(non_existing_lookup.group(4))
-            row_data['True_Negative_Rate'] = float(non_existing_lookup.group(5))
-            row_data['False_Positive_Count'] = int(non_existing_lookup.group(6))
-            row_data['False_Positive_Rate'] = float(non_existing_lookup.group(7))
-        
-        data_rows.append(row_data)
-    
-    # 写入CSV文件
-    if data_rows:
-        with open(out_path, 'w', newline='', encoding='utf-8') as outfile:
-            # 获取所有字段名
-            fieldnames = list(data_rows[0].keys())
-            
-            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(data_rows)
-        
-        print(f"CSV文件已生成: {out_path}")
-        print(f"共处理 {len(data_rows)} 个负载阶段")
-    else:
-        print("未找到有效数据")
-
-def handle_dram_ohbbf(in_path, out_path):
+def handle_dram_bbf_or_ohbbf(in_path, out_path):
     with open(in_path, 'r', encoding='utf-8') as infile:
         content = infile.read()
 
-    # 提取 DramOHBBF 实验部分的内容
-    dram_ohbbf_match = re.search(r'=== DramOHBBF Experiment ===\n(.*?)\n=== DramOHBBF Experiment End ===', content, re.DOTALL)
-    if not dram_ohbbf_match:
-        print("未找到 DramOHBBF 实验数据")
+    # DramBBF / DramOHBBF 日志结构一致，统一解析
+    dram_bbf_match = re.search(
+        r'=== (Dram(?:OH)?BBF) Experiment ===\n(.*?)\n=== \1 Experiment End ===',
+        content,
+        re.DOTALL,
+    )
+    if not dram_bbf_match:
+        print("未找到 DramBBF/DramOHBBF 实验数据")
         return
 
-    content = dram_ohbbf_match.group(1)
+    experiment_name = dram_bbf_match.group(1)
+    content = dram_bbf_match.group(2)
 
     # 按负载百分比分割数据
     load_sections = re.split(r'== When Load (\d+) percent elements ==', content)
@@ -197,10 +146,11 @@ def handle_dram_ohbbf(in_path, out_path):
             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(data_rows)
-        print(f"DramOHBBF CSV文件已生成: {out_path}")
+
+        print(f"{experiment_name} CSV文件已生成: {out_path}")
         print(f"共处理 {len(data_rows)} 个负载阶段")
     else:
-        print("未找到有效 DramOHBBF 数据")
+        print(f"未找到有效 {experiment_name} 数据")
 
 def handle_dram_cf(in_path, out_path):
     with open(in_path, 'r', encoding='utf-8') as infile:
@@ -304,8 +254,254 @@ def handle_dram_cf(in_path, out_path):
     else:
         print("未找到有效 DramCF 数据")
 
+def handle_rdma_bf(in_path, out_path):
+    with open(in_path, 'r', encoding='utf-8') as infile:
+        content = infile.read()
+
+    rdma_bf_match = re.search(r'=== RdmaBF Experiment ===\n(.*?)\n==== Experiment End ====', content, re.DOTALL)
+    if not rdma_bf_match:
+        print("未找到 RdmaBF 实验数据")
+        return
+
+    content = rdma_bf_match.group(1)
+
+    insert_qps_list = [
+        float(value)
+        for value in re.findall(
+            r'= Inserting =.*?Inserted \d+ items\.\s+Time\(s\): [\d.e+-]+\s+Throughput\(op/s\): ([\d.e+-]+)',
+            content,
+            re.DOTALL,
+        )
+    ]
+
+    lookup_matches = re.findall(
+        r'== When Load (\d+) percent elements ==.*?'
+        r'= Lookingup existing items =.*?'
+        r'Lookup \d+ existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+).*?'
+        r'= Lookingup non-existing items =.*?'
+        r'Lookup \d+ non-existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+)',
+        content,
+        re.DOTALL,
+    )
+
+    row_map = {}
+
+    for index, insert_qps in enumerate(insert_qps_list):
+        load_factor = index * 5
+        row_map[load_factor] = {
+            'Load': load_factor,
+            'Insert_QPS': float(insert_qps),
+            'Positive_Query_QPS': '',
+            'Negative_Query_QPS': '',
+        }
+
+    for matched_load, positive_query_qps, negative_query_qps in lookup_matches:
+        load_factor = int(matched_load)
+        if load_factor not in row_map:
+            row_map[load_factor] = {
+                'Load': load_factor,
+                'Insert_QPS': '',
+                'Positive_Query_QPS': '',
+                'Negative_Query_QPS': '',
+            }
+
+        row_map[load_factor]['Positive_Query_QPS'] = float(positive_query_qps)
+        row_map[load_factor]['Negative_Query_QPS'] = float(negative_query_qps)
+
+    data_rows = [row_map[load] for load in sorted(row_map.keys())]
+
+    if data_rows:
+        fieldnames = ['Load', 'Insert_QPS', 'Positive_Query_QPS', 'Negative_Query_QPS']
+        with open(out_path, 'w', newline='', encoding='utf-8') as outfile:
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data_rows)
+        print(f"RdmaBF CSV文件已生成: {out_path}")
+        print(f"共处理 {len(data_rows)} 个负载阶段")
+    else:
+        print("未找到有效 RdmaBF 数据")
+
+def handle_rdma_bbf_or_ohbbf(in_path, out_path):
+    with open(in_path, 'r', encoding='utf-8') as infile:
+        content = infile.read()
+
+    # RdmaBBF / RdmaOHBBF 日志结构一致，统一解析
+    rdma_bbf_match = re.search(
+        r'=== (Rdma(?:OH)?BBF) Experiment ===\n(.*?)\n==== Experiment End ====',
+        content,
+        re.DOTALL,
+    )
+    if not rdma_bbf_match:
+        print("未找到 RdmaBBF/RdmaOHBBF 实验数据")
+        return
+
+    experiment_name = rdma_bbf_match.group(1)
+    content = rdma_bbf_match.group(2)
+
+    insert_qps_list = [
+        float(value)
+        for value in re.findall(
+            r'= Inserting =.*?Inserted \d+ items\.\s+Time\(s\): [\d.e+-]+\s+Throughput\(op/s\): ([\d.e+-]+)',
+            content,
+            re.DOTALL,
+        )
+    ]
+
+    lookup_matches = re.findall(
+        r'== When Load (\d+) percent elements ==.*?'
+        r'= Lookingup existing items =.*?'
+        r'Lookup \d+ existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+).*?'
+        r'= Lookingup non-existing items =.*?'
+        r'Lookup \d+ non-existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+)',
+        content,
+        re.DOTALL,
+    )
+
+    row_map = {}
+
+    for index, insert_qps in enumerate(insert_qps_list):
+        load_factor = index * 5
+        row_map[load_factor] = {
+            'Load': load_factor,
+            'Insert_QPS': float(insert_qps),
+            'Positive_Query_QPS': '',
+            'Negative_Query_QPS': '',
+        }
+
+    for matched_load, positive_query_qps, negative_query_qps in lookup_matches:
+        load_factor = int(matched_load)
+        if load_factor not in row_map:
+            row_map[load_factor] = {
+                'Load': load_factor,
+                'Insert_QPS': '',
+                'Positive_Query_QPS': '',
+                'Negative_Query_QPS': '',
+            }
+
+        row_map[load_factor]['Positive_Query_QPS'] = float(positive_query_qps)
+        row_map[load_factor]['Negative_Query_QPS'] = float(negative_query_qps)
+
+    data_rows = [row_map[load] for load in sorted(row_map.keys())]
+
+    if data_rows:
+        fieldnames = ['Load', 'Insert_QPS', 'Positive_Query_QPS', 'Negative_Query_QPS']
+        with open(out_path, 'w', newline='', encoding='utf-8') as outfile:
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data_rows)
+        print(f"{experiment_name} CSV文件已生成: {out_path}")
+        print(f"共处理 {len(data_rows)} 个负载阶段")
+    else:
+        print(f"未找到有效 {experiment_name} 数据")
+
+def handle_rdma_cf(in_path, out_path):
+    with open(in_path, 'r', encoding='utf-8') as infile:
+        content = infile.read()
+
+    rdma_cf_match = re.search(r'=== RdmaCF Experiment ===\n(.*?)\n==== Experiment End ====', content, re.DOTALL)
+    if not rdma_cf_match:
+        print("未找到 RdmaCF 实验数据")
+        return
+
+    content = rdma_cf_match.group(1)
+
+    insert_qps_list = [
+        float(value)
+        for value in re.findall(
+            r'= Inserting =.*?Inserted \d+ items\.\s+Time\(s\): [\d.e+-]+\s+Throughput\(op/s\): ([\d.e+-]+)',
+            content,
+            re.DOTALL,
+        )
+    ]
+
+    lookup_matches = re.findall(
+        r'== When Load (\d+) percent elements ==.*?'
+        r'= Lookingup existing items =.*?'
+        r'Lookup \d+ existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+).*?'
+        r'= Lookingup non-existing items =.*?'
+        r'Lookup \d+ non-existing items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+)',
+        content,
+        re.DOTALL,
+    )
+
+    delete_matches = re.findall(
+        r'== When Load (\d+) percent elements ==\s*'
+        r'= Deleting items =.*?'
+        r'Deleted \d+ items\.\s+'
+        r'Time\(s\): [\d.e+-]+\s+'
+        r'Throughput\(op/s\): ([\d.e+-]+)',
+        content,
+        re.DOTALL,
+    )
+
+    row_map = {}
+
+    # Insert阶段与其他handle保持一致：第1轮插入对应Load=0
+    for index, insert_qps in enumerate(insert_qps_list):
+        load_factor = index * 5
+        row_map[load_factor] = {
+            'Load': load_factor,
+            'Insert_QPS': float(insert_qps),
+            'Positive_Query_QPS': '',
+            'Negative_Query_QPS': '',
+            'delete_qps': '',
+        }
+
+    for matched_load, positive_query_qps, negative_query_qps in lookup_matches:
+        load_factor = int(matched_load)
+        if load_factor not in row_map:
+            row_map[load_factor] = {
+                'Load': load_factor,
+                'Insert_QPS': '',
+                'Positive_Query_QPS': '',
+                'Negative_Query_QPS': '',
+                'delete_qps': '',
+            }
+
+        row_map[load_factor]['Positive_Query_QPS'] = float(positive_query_qps)
+        row_map[load_factor]['Negative_Query_QPS'] = float(negative_query_qps)
+
+    for matched_load, delete_qps in delete_matches:
+        load_factor = int(matched_load)
+        if load_factor not in row_map:
+            row_map[load_factor] = {
+                'Load': load_factor,
+                'Insert_QPS': '',
+                'Positive_Query_QPS': '',
+                'Negative_Query_QPS': '',
+                'delete_qps': '',
+            }
+
+        row_map[load_factor]['delete_qps'] = float(delete_qps)
+
+    data_rows = [row_map[load] for load in sorted(row_map.keys())]
+
+    if data_rows:
+        fieldnames = ['Load', 'Insert_QPS', 'Positive_Query_QPS', 'Negative_Query_QPS', 'delete_qps']
+        with open(out_path, 'w', newline='', encoding='utf-8') as outfile:
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data_rows)
+        print(f"RdmaCF CSV文件已生成: {out_path}")
+        print(f"共处理 {len(data_rows)} 个负载阶段")
+    else:
+        print("未找到有效 RdmaCF 数据")
+
+
 if __name__ == '__main__':
-    handle_dram_bf(in_path, out_path_1)
-    handle_dram_bbf(in_path, out_path_2)
-    handle_dram_ohbbf(in_path, out_path_3)
-    handle_dram_cf(in_path, out_path_4)
+    '''
+    python result/generate_csv.py
+    '''
+    handle_rdma_bbf(in_path_04, out_path_12)

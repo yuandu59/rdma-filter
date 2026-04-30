@@ -10,6 +10,7 @@ target_include_directories(header INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/rdma_ohbbf
     ${CMAKE_CURRENT_SOURCE_DIR}/dram_cf
     ${CMAKE_CURRENT_SOURCE_DIR}/rdma_cf
+    ${CMAKE_CURRENT_SOURCE_DIR}/dram_qf
 )
 
 
@@ -33,9 +34,9 @@ add_library(dramohbbf STATIC "dram_ohbbf/dram_ohbbf.cpp")
 target_link_libraries(dramohbbf PUBLIC header murmur)
 target_compile_options(dramohbbf PRIVATE -Ofast)
 
-# add_library(dramcf STATIC "dram_cf/dram_cf.cpp")
-# target_link_libraries(dramcf PUBLIC header murmur)
-# target_compile_options(dramcf PRIVATE -Ofast)
+add_library(dramqf STATIC "dram_qf/dram_qf.cpp")
+target_link_libraries(dramqf PUBLIC header murmur)
+target_compile_options(dramqf PRIVATE -Ofast)
 
 if (TOGGLE_RDMA)
 

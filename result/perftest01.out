@@ -1,0 +1,133 @@
+clemson c6615 100Gbps
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.148000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 64      1000          2.08           5.52         2.11                2.12             0.10            2.27           5.52
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 128
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.133000. CPU Frequency is not max.
+ 128     1000          2.11           6.98         2.13                2.14             0.03            2.29           6.98
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 256
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 256     1000          2.56           4.50         2.60                2.62             0.06            2.80           4.50
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 512
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 512     1000          2.63           5.05         2.68                2.70             0.07            2.94           5.05
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 1024
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 1024    1000          2.73           7.76         2.78                2.79             0.09            2.96           7.76
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 2048
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.133000. CPU Frequency is not max.
+ 2048    1000          2.94           4.91         2.99                3.00             0.04            3.16           4.91
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 4096
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 4096    1000          3.37           6.46         3.41                3.42             0.06            3.60           6.46
+
+yunchuan@node1:~$ ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 8192    1000          3.87           5.42         3.91                3.92             0.05            4.10           5.42
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 64         1000             330.62             317.62             5.203914
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 128
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 128        1000             648.27             627.60             5.141310
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 256
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+ 256        1000             1322.48            1313.62            5.380584
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 512
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 512        1000             2238.32            2176.50            4.457482
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 1024
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 1024       1000             5177.72            5012.56            5.132857
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 2048
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 2048       1000             9872.29            9688.46            4.960493
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 4096
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+ 4096       1000             11355.78            11284.92                  2.888940
+
+yunchuan@node1:~$ ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.174000. CPU Frequency is not max.
+ 8192       1000             11484.18            11447.29                  1.465253
+
+yunchuan@node1:~$ ib_read_bw -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 64         1000             265.56             264.44             4.332534
+
+yunchuan@node1:~$ ib_read_bw -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+ 8192       1000             11552.10            11541.31                  1.477288
+
+yunchuan@node1:~$ ib_read_lat -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 64      1000          3.89           8.26         3.92                3.93             0.04            4.09           8.26
+
+yunchuan@node1:~$ ib_read_lat -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 8192    1000          5.17           10.12        5.27                5.28             0.07            5.58           10.12
+
+yunchuan@node1:~$ ib_write_bw -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.037000. CPU Frequency is not max.
+ 64         5000             322.55             320.20             5.246115
+
+yunchuan@node1:~$ ib_write_bw -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.123000. CPU Frequency is not max.
+ 8192       5000             11647.49            11640.19                  1.489944
+
+yunchuan@node1:~$ ib_write_lat -d mlx5_0 -i 1 10.10.1.1 -s 64
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.130000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.133000. CPU Frequency is not max.
+ 64      1000          2.06           4.46         2.08                2.09             0.05            2.15           4.46
+
+yunchuan@node1:~$ ib_write_lat -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 3250.115000 != 3800.129000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 3250.115000 != 3800.134000. CPU Frequency is not max.
+ 8192    1000          3.82           5.96         3.89                3.90             0.01            3.95           5.96

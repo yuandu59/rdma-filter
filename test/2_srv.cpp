@@ -11,7 +11,7 @@
 #define GID_INDEX (2)
 #define TCP_PORT (18515)
 
-#define CLIENT_COUNT (2)
+#define CLIENT_COUNT (1)
 
 #define INSERT_COUNT (1 << 26)
 
@@ -39,9 +39,9 @@ int main(int argc, char **argv) {
     std::cout << "=== RdmaBF Experiment ===" << std::endl;
     struct RdmaBF_Srv srv;
     RdmaBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
+    for (int i = 0; i < 60; i++) {
+        sync_server(srv.list_sockfd);
+    }
     for (int i = 0; i < count_clients; i++) {
         reliable_recv(srv.list_sockfd[i], cmd, 5);
         std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
@@ -54,9 +54,9 @@ int main(int argc, char **argv) {
     std::cout << "=== RdmaBBF Experiment ===" << std::endl;
     struct RdmaBBF_Srv srv;
     RdmaBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
+    for (int i = 0; i < 60; i++) {
+        sync_server(srv.list_sockfd);
+    }
     for (int i = 0; i < count_clients; i++) {
         reliable_recv(srv.list_sockfd[i], cmd, 5);
         std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
@@ -68,9 +68,9 @@ int main(int argc, char **argv) {
     std::cout << "=== RdmaOHBBF Experiment ===" << std::endl;
     struct RdmaOHBBF_Srv srv;
     RdmaOHBBF_Srv_init(&srv, INSERT_COUNT, FALSE_POSITIVE_RATE, count_clients, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK, BLOCK_SIZE);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
+    for (int i = 0; i < 60; i++) {
+        sync_server(srv.list_sockfd);
+    }
     for (int i = 0; i < count_clients; i++) {
         reliable_recv(srv.list_sockfd[i], cmd, 5);
         std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;
@@ -85,11 +85,9 @@ int main(int argc, char **argv) {
     
     sync_server(srv.list_sockfd);
     std::cout << "[Server] Initialization successfully!" << std::endl;
-
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
-    sync_server(srv.list_sockfd);
+    for (int i = 0; i < 76; i++) {
+        sync_server(srv.list_sockfd);
+    }
     for (int i = 0; i < count_clients; i++) {
         reliable_recv(srv.list_sockfd[i], cmd, 5);
         std::cout << "[Server] Received close message from client: " << i + 1 << "/" << count_clients << std::endl;

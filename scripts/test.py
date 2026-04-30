@@ -1,8 +1,5 @@
 import os, sys, subprocess, time
 
-rnic_name = "mlx5_0"
-rnic_port = 1
-nat_ip = "10.10.1.1"
 count_clients = 1
 
 count_hugepages = 128  # INSERT_COUNT == 2 ^ 26 <==> size_data == 256 MB <==> 128 hugepages(2 MB)
@@ -11,12 +8,17 @@ path_project = os.sep.join(["D:", "study", "rdma-filter"])
 path_list_machines = os.sep.join([path_project, "scripts", "list_machines.txt"])
 path_temp = os.sep.join([path_project, "scripts", "temp"])
 path_output = os.sep.join([path_project, "output"])
-path_script_log = os.sep.join([path_project, "scripts", "script.log"])
+path_script_log = os.sep.join([path_project, "scripts", "script01.log"])
 
 path_ssh_local = os.sep.join(["C:", "Users", "Yuandu", ".ssh"])
 path_public_key_cloudlab = os.sep.join([path_ssh_local, "cloudlab.pub"])
 path_private_key_cloudlab = os.sep.join([path_ssh_local, "cloudlab"])
 path_private_key_rsa = os.sep.join([path_ssh_local, "id_rsa"])
+
+# for perftest
+rnic_name = "mlx5_0"
+rnic_port = 1
+nat_ip = "10.10.1.1"
 
 class Command:
     words: list
@@ -105,7 +107,7 @@ if __name__ == "__main__":
             Command(["mkdir", "exp1", ">", "init.log", "2>&1"]), 
             Command(["mkdir", "exp1/build", ">>", "init.log", "2>&1"]),
             Command(["sudo", "apt", "update", ">>", "init.log", "2>&1"]), 
-            Command(["sudo", "apt", "install", "-y", "cmake", "libibverbs-dev", "rdma-core", "librdmacm1", "librdmacm-dev",     "ibverbs-utils", "infiniband-diags", "perftest", "linux-tools-common", "linux-tools-generic", "linux-cloud-tools-generic", "tmux", ">>", "init.log", "2>&1"])
+            Command(["sudo", "apt", "install", "-y", "cmake", "libibverbs-dev", "rdma-core", "librdmacm1", "librdmacm-dev", "ibverbs-utils", "infiniband-diags", "perftest", "linux-tools-common", "linux-tools-generic", "linux-cloud-tools-generic", "tmux", ">>", "init.log", "2>&1"])
         ])
         list_cmd_chmod = CommandList([
             Command(["chmod", "700", ".ssh"]),
@@ -231,3 +233,5 @@ if __name__ == "__main__":
     
     else:
         print(little_tip)
+    
+    log("main", "Done")

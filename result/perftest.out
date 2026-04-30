@@ -1,0 +1,90 @@
+wisconsin c240g5
+
+ib_send_bw -d mlx5_0 -i 1 -s 64 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2200.000000 != 2271.129000. CPU Frequency is not max.
+ 64         1000             101.04             100.31             1.643407
+
+ib_send_bw -d mlx5_0 -i 1 -s 128 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2282.519000 != 2200.000000. CPU Frequency is not max.
+ 128        1000             199.23             197.72             1.619721
+
+ib_send_bw -d mlx5_0 -i 1 -s 256 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2274.289000 != 2200.000000. CPU Frequency is not max.
+ 256        1000             446.85             433.14             1.774132
+
+ib_send_bw -d mlx5_0 -i 1 -s 512 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2279.734000 != 2200.000000. CPU Frequency is not max.
+ 512        1000             790.45             764.64             1.565986
+
+ib_send_bw -d mlx5_0 -i 1 -s 1024 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2200.000000 != 2299.779000. CPU Frequency is not max.
+ 1024       1000             1522.63            1475.86            1.511280
+
+ib_send_bw -d mlx5_0 -i 1 -s 2048 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2270.469000 != 2200.000000. CPU Frequency is not max.
+ 2048       1000             2716.13            2707.91            1.386449
+
+ib_send_bw -d mlx5_0 -i 1 -s 4096 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2200.000000 != 2287.539000. CPU Frequency is not max.
+ 4096       1000             2735.99            2732.74            0.699581
+
+ib_send_bw -d mlx5_0 -i 1 -s 8192 10.10.1.1
+ #bytes     #iterations    BW peak[MB/sec]    BW average[MB/sec]   MsgRate[Mpps]
+Conflicting CPU frequency values detected: 2282.075000 != 2200.000000. CPU Frequency is not max.
+ 8192       1000             2746.48            2746.19            0.351513
+
+
+ib_send_lat -d mlx5_0 -i 1 -s 64 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2292.703000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 64      1000          2.51           10.76        2.59                2.63             0.15            2.77           10.76
+
+ib_send_lat -d mlx5_0 -i 1 -s 128 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2271.517000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 128     1000          2.58           11.27        2.78                2.81             0.23            2.95           11.27
+
+ib_send_lat -d mlx5_0 -i 1 -s 256 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2282.231000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 256     1000          3.03           9.14         3.21                3.24             0.22            3.36           9.14
+
+ib_send_lat -d mlx5_0 -i 1 -s 512 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2200.000000 != 2280.371000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2200.000000 != 2499.999000. CPU Frequency is not max.
+ 512     1000          3.27           9.81         3.43                3.41             0.15            3.64           9.81
+
+ib_send_lat -d mlx5_0 -i 1 -s 1024 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2200.000000 != 2286.901000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2200.000000 != 2500.000000. CPU Frequency is not max.
+ 1024    1000          3.69           9.70         3.93                3.93             0.24            4.18           9.70
+
+ib_send_lat -d mlx5_0 -i 1 -s 2048 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2292.386000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 2048    1000          4.14           153.02       4.32                4.36             1.61            4.54           153.02
+
+ib_send_lat -d mlx5_0 -i 1 -s 4096 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2290.609000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 4096    1000          4.85           14.34        5.06                5.08             0.31            5.32           14.34
+
+ib_send_lat -d mlx5_0 -i 1 -s 8192 10.10.1.1
+ #bytes #iterations    t_min[usec]    t_max[usec]  t_typical[usec]    t_avg[usec]    t_stdev[usec]   99% percentile[usec]   99.9% percentile[usec]
+Conflicting CPU frequency values detected: 2274.271000 != 2200.000000. CPU Frequency is not max.
+Conflicting CPU frequency values detected: 2500.000000 != 2200.000000. CPU Frequency is not max.
+ 8192    1000          6.26           13.34        6.56                6.56             0.35            6.83           13.34

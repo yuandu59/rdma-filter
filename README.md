@@ -21,7 +21,9 @@ python scripts/test.py init
 
 // 编译，会把输出读到output/compile.log，每次运行完检查一下编译成功了吗
 python scripts/test.py compile -DSWITCH_EXP=rdma_cf
-python scripts/test.py compile -DSWITCH_EXP=rdma_bbf -DTOGGLE_LOCK_FREE=ON
+python scripts/test.py compile -DSWITCH_EXP=rdma_cf -DTOGGLE_LOCK_FREE=ON
+python scripts/test.py compile -DSWITCH_EXP=rdma_cf
+python scripts/test.py compile -DSWITCH_EXP=rdma_ohbbf -DTOGGLE_LOCK_FREE=ON
 
 // 部署 + 运行，需要先编译好，再运行这一步
 python scripts/test.py deploy; python scripts/test.py run

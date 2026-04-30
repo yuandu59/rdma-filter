@@ -14,9 +14,14 @@
 #define GID_INDEX (2)
 #define TCP_PORT (18515)
 
+#define CLIENT_COUNT (1)
+
 #define INSERT_COUNT (1 << 26)
-#define LOOKUP_COUNT (1 << 26)
+#define LOOKUP_COUNT (1 << 22)
 #define REAL_INSERT_COUNT (1 << 26)
+
+#define ROUND_COUNT (20)
+#define SINGLE_ROUND_COUNT (REAL_INSERT_COUNT / ROUND_COUNT / CLIENT_COUNT)
 
 #define FALSE_POSITIVE_RATE ((double)1.0 / 512)
 
@@ -53,51 +58,56 @@ int main(int argc, char **argv) {
     struct RdmaBF_Cli cli;
     RdmaBF_Cli_init(&cli, INSERT_COUNT, FALSE_POSITIVE_RATE, SERVER_IP, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN);
 
-    std::cout << "= Inserting =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        RdmaBF_Cli_insert(&cli, i);
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Inserted " << REAL_INSERT_COUNT << " items." << std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+    for (int i = 0; i < ROUND_COUNT; i++) {
+        std::cout << std::endl << "= Inserting =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            RdmaBF_Cli_insert(&cli, to_insert[i * SINGLE_ROUND_COUNT + j]);
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Inserted " << SINGLE_ROUND_COUNT << " items." << std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
 
-    std::cout << std::endl << "= Lookingup existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (RdmaBF_Cli_lookup(&cli, i)) true_positive_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << REAL_INSERT_COUNT << " existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
-    std::cout << "True Positive Count: " << true_positive_count << std::endl;
-    std::cout << "True Positive Rate: " << (double)true_positive_count / REAL_INSERT_COUNT << std::endl;
+        std::cout << std::endl << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+        true_positive_count = 0;
+        true_negative_count = 0;
+        false_positive_count = 0;
+        std::cout << std::endl << "= Lookingup existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (RdmaBF_Cli_lookup(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << SINGLE_ROUND_COUNT << " existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+        std::cout << "True Positive Count: " << true_positive_count << std::endl;
+        std::cout << "True Positive Rate: " << (double)true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-    std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_lookup) {
-        if (RdmaBF_Cli_lookup(&cli, i)) false_positive_count++;
-        else true_negative_count++;
+        std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto i : to_lookup) {
+            if (RdmaBF_Cli_lookup(&cli, i)) false_positive_count++;
+            else true_negative_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "True Negative Count: " << true_negative_count << std::endl;
+        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+        std::cout << "False Positive Count: " << false_positive_count << std::endl;
+        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
     }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "True Negative Count: " << true_negative_count << std::endl;
-    std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-    std::cout << "False Positive Count: " << false_positive_count << std::endl;
-    std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-    
     reliable_send(cli.sockfd, "EXIT", 5);
     RdmaBF_Cli_destroy(&cli);
 
@@ -106,51 +116,56 @@ int main(int argc, char **argv) {
     struct RdmaBBF_Cli cli;
     RdmaBBF_Cli_init(&cli, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE, SERVER_IP, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK);
 
-    std::cout << "= Inserting =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        RdmaBBF_Cli_insert(&cli, i);
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Inserted " << REAL_INSERT_COUNT << " items." << std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+    for (int i = 0; i < ROUND_COUNT; i++) {
+        std::cout << std::endl << "= Inserting =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            RdmaBBF_Cli_insert(&cli, to_insert[i * SINGLE_ROUND_COUNT + j]);
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Inserted " << SINGLE_ROUND_COUNT << " items." << std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
 
-    std::cout << std::endl << "= Lookingup existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (RdmaBBF_Cli_lookup(&cli, i)) true_positive_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << REAL_INSERT_COUNT << " existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
-    std::cout << "True Positive Count: " << true_positive_count << std::endl;
-    std::cout << "True Positive Rate: " << (double)true_positive_count / REAL_INSERT_COUNT << std::endl;
+        std::cout << std::endl << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+        true_positive_count = 0;
+        true_negative_count = 0;
+        false_positive_count = 0;
+        std::cout << std::endl << "= Lookingup existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (RdmaBBF_Cli_lookup(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << SINGLE_ROUND_COUNT << " existing items." << std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+        std::cout << "True Positive Count: " << true_positive_count << std::endl;
+        std::cout << "True Positive Rate: " << (double)true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-    std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_lookup) {
-        if (RdmaBBF_Cli_lookup(&cli, i)) false_positive_count++;
-        else true_negative_count++;
+        std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto j : to_lookup) {
+            if (RdmaBBF_Cli_lookup(&cli, j)) false_positive_count++;
+            else true_negative_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "True Negative Count: " << true_negative_count << std::endl;
+        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+        std::cout << "False Positive Count: " << false_positive_count << std::endl;
+        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
     }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "True Negative Count: " << true_negative_count << std::endl;
-    std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-    std::cout << "False Positive Count: " << false_positive_count << std::endl;
-    std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-    
     reliable_send(cli.sockfd, "EXIT", 5);
     RdmaBBF_Cli_destroy(&cli);
 
@@ -160,51 +175,56 @@ int main(int argc, char **argv) {
     struct RdmaOHBBF_Cli cli;
     RdmaOHBBF_Cli_init(&cli, INSERT_COUNT, FALSE_POSITIVE_RATE, BLOCK_SIZE, SERVER_IP, RNIC_NAME, RNIC_PORT, TCP_PORT, GID_INDEX, MUTEX_GRAN_BLOCK);
 
-    std::cout << "= Inserting =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        RdmaOHBBF_Cli_insert(&cli, i);
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Inserted " << REAL_INSERT_COUNT << " items." << std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+    for (int i = 0; i < ROUND_COUNT; i++) {
+        std::cout << std::endl << "= Inserting =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            RdmaOHBBF_Cli_insert(&cli, to_insert[i * SINGLE_ROUND_COUNT + j]);
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Inserted " << SINGLE_ROUND_COUNT << " items." << std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 2 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
 
-    std::cout << std::endl << "= Lookingup existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (RdmaOHBBF_Cli_lookup(&cli, i)) true_positive_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << REAL_INSERT_COUNT << " existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * REAL_INSERT_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
-    std::cout << "True Positive Count: " << true_positive_count << std::endl;
-    std::cout << "True Positive Rate: " << (double)true_positive_count / REAL_INSERT_COUNT << std::endl;
+        std::cout << std::endl << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+        true_positive_count = 0;
+        true_negative_count = 0;
+        false_positive_count = 0;
+        std::cout << std::endl << "= Lookingup existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (RdmaOHBBF_Cli_lookup(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << SINGLE_ROUND_COUNT << " existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Payload-Bandwidth(MB/s): " << 1.0 * SINGLE_ROUND_COUNT * 1 * cli.k / duration.count() * 1000.0 / 1024 / 1024 << std::endl;
+        std::cout << "True Positive Count: " << true_positive_count << std::endl;
+        std::cout << "True Positive Rate: " << (double)true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-    std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_lookup) {
-        if (RdmaOHBBF_Cli_lookup(&cli, i)) false_positive_count++;
-        else true_negative_count++;
+        std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto i : to_lookup) {
+            if (RdmaOHBBF_Cli_lookup(&cli, i)) false_positive_count++;
+            else true_negative_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "True Negative Count: " << true_negative_count << std::endl;
+        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+        std::cout << "False Positive Count: " << false_positive_count << std::endl;
+        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
     }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "True Negative Count: " << true_negative_count << std::endl;
-    std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-    std::cout << "False Positive Count: " << false_positive_count << std::endl;
-    std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
-
     reliable_send(cli.sockfd, "EXIT", 5);
     RdmaOHBBF_Cli_destroy(&cli);
 
@@ -217,64 +237,75 @@ int main(int argc, char **argv) {
     sync_client(cli.sockfd);
     std::cout << "[Client] Initialization successfully!" << std::endl;
 
-    std::cout << "= Inserting =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (Ok == RdmaCF_Cli_insert(&cli, i)) insert_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Inserted " << REAL_INSERT_COUNT << " items." << std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Really inserted count: " << insert_count << std::endl;
-    std::cout << "Really inserted rate: " << 1.0 * insert_count / REAL_INSERT_COUNT << std::endl;
-    
-    std::cout << std::endl << "= Lookingup existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (Ok == RdmaCF_Cli_lookup(&cli, i)) true_positive_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << REAL_INSERT_COUNT << " existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "True Positive Count: " << true_positive_count << std::endl;
-    std::cout << "True Positive Rate: " << (double)true_positive_count / REAL_INSERT_COUNT << std::endl;
+    for (int i = 0; i < ROUND_COUNT - 1; i++) {
+        std::cout << std::endl << "= Inserting =" << std::endl;
+        insert_count = 0;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (Ok == RdmaCF_Cli_insert(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) insert_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Inserted " << SINGLE_ROUND_COUNT << " items." << std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Really inserted count: " << insert_count << std::endl;
+        std::cout << "Really inserted rate: " << 1.0 * insert_count / SINGLE_ROUND_COUNT << std::endl;
 
-    std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_lookup) {
-        if (Ok == RdmaCF_Cli_lookup(&cli, i)) false_positive_count++;
-        else true_negative_count++;
-    }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "True Negative Count: " << true_negative_count << std::endl;
-    std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
-    std::cout << "False Positive Count: " << false_positive_count << std::endl;
-    std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
+        std::cout << std::endl << "== When Load " << (i + 1) * 5 << " percent elements ==" << std::endl;
+        true_positive_count = 0;
+        true_negative_count = 0;
+        false_positive_count = 0;
+        std::cout << std::endl << "= Lookingup existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (Ok == RdmaCF_Cli_lookup(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) true_positive_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << SINGLE_ROUND_COUNT << " existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "True Positive Count: " << true_positive_count << std::endl;
+        std::cout << "True Positive Rate: " << (double)true_positive_count / SINGLE_ROUND_COUNT << std::endl;
 
-    std::cout << std::endl << "= Deleting items =" << std::endl;
-    sync_client(cli.sockfd);
-    start_time = std::chrono::high_resolution_clock::now();
-    for (auto i : to_insert) {
-        if (Ok == RdmaCF_Cli_delete(&cli, i)) delete_count++;
+        std::cout << std::endl << "= Lookingup non-existing items =" << std::endl;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (auto j : to_lookup) {
+            if (Ok == RdmaCF_Cli_lookup(&cli, j)) false_positive_count++;
+            else true_negative_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Lookup " << LOOKUP_COUNT << " non-existing items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * LOOKUP_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "True Negative Count: " << true_negative_count << std::endl;
+        std::cout << "True Negative Rate: " << 1.0 * true_negative_count / LOOKUP_COUNT << std::endl;
+        std::cout << "False Positive Count: " << false_positive_count << std::endl;
+        std::cout << "False Positive Rate: " << 1.0 * false_positive_count / LOOKUP_COUNT << std::endl;
     }
-    end_time = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << "Deleted " << REAL_INSERT_COUNT << " items." <<  std::endl;
-    std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
-    std::cout << "Throughput(op/s): " << 1.0 * REAL_INSERT_COUNT / duration.count() * 1000.0 << std::endl;
-    std::cout << "Really deleted count: " << delete_count << std::endl;
-    std::cout << "Really deleted rate: " << 1.0 * delete_count / REAL_INSERT_COUNT << std::endl;
+
+    for (int i = 0; i < ROUND_COUNT - 1; i++) {
+        std::cout << std::endl << "== When Load " << (19 - i) * 5 << " percent elements ==" << std::endl;
+        std::cout << std::endl << "= Deleting items =" << std::endl;
+        delete_count = 0;
+        sync_client(cli.sockfd);
+        start_time = std::chrono::high_resolution_clock::now();
+        for (int j = 0; j < SINGLE_ROUND_COUNT; j++) {
+            if (Ok == RdmaCF_Cli_delete(&cli, to_insert[i * SINGLE_ROUND_COUNT + j])) delete_count++;
+        }
+        end_time = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Deleted " << SINGLE_ROUND_COUNT << " items." <<  std::endl;
+        std::cout << "Time(s): " << duration.count() / 1000.0 << std::endl;
+        std::cout << "Throughput(op/s): " << 1.0 * SINGLE_ROUND_COUNT / duration.count() * 1000.0 << std::endl;
+        std::cout << "Really deleted count: " << delete_count << std::endl;
+        std::cout << "Really deleted rate: " << 1.0 * delete_count / SINGLE_ROUND_COUNT << std::endl;
+    }
     
     reliable_send(cli.sockfd, "EXIT", 5);
     RdmaCF_Cli_destroy(&cli);

@@ -23,8 +23,8 @@ python scripts/test.py compile -DSWITCH_EXP=rdma_cf -DTOGGLE_LOCK_FREE=ON
 python scripts/test.py compile -DSWITCH_EXP=rdma_cf -DTOGGLE_HUGEPAGE=ON
 python scripts/test.py perftest
 
-ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode352.clemson.cloudlab.us
-ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode363.clemson.cloudlab.us
+ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode368.clemson.cloudlab.us
+ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode365.clemson.cloudlab.us
 ssh -o StrictHostKeyChecking=no -i "C:\Users\Yuandu\.ssh\id_rsa" yunchuan@clnode392.clemson.cloudlab.us
 
 scp -r src test build CMakeLists.txt yunchuan@ms0902.utah.cloudlab.us:exp01
@@ -35,9 +35,15 @@ mkdir exp01
 sudo apt update
 sudo apt install cmake libibverbs-dev rdma-core librdmacm1 librdmacm-dev ibverbs-utils infiniband-diags perftest linux-tools-common linux-tools-generic linux-cloud-tools-generic tmux
 
-ib_send_bw -d mlx4_0 -i 2
-ib_send_bw -d mlx4_0 -i 2               10.10.1.1
-ib_send_bw -d mlx4_0 -i 2 -D 4 -s 65536 10.10.1.1
+ib_send_bw -d mlx5_0 -i 1 -s 64
+ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 64
+ib_send_lat -d mlx5_0 -i 1 -s 64
+ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 64
+ib_send_bw -d mlx5_0 -i 1 -s 8192
+ib_send_bw -d mlx5_0 -i 1 10.10.1.1 -s 8192
+ib_send_lat -d mlx5_0 -i 1 -s 8192
+ib_send_lat -d mlx5_0 -i 1 10.10.1.1 -s 8192
+-s 64 128 256 512 1024 2048 4096 8192
 ping 10.10.1.1
 
 tmux new -s exp_srv
@@ -61,7 +67,7 @@ ip addr
 查看网卡名
 ibstat
 或
-ib_devinfo
+ibv_devinfo
 
 
 ## CloudLab Node
@@ -117,13 +123,18 @@ ibm8335, r7525, r650, r6525, nvidiagh, r6615
 
 
 问题：误用cloudlab集群控制网络，流量过大被监测到，导致实验中断并收到官方邮件。
-解决：网卡两个端口，第一个端口默认是控制网络的，所以要使用第二个端口。两个端口的GID表是独立的，要查一下确认GID的index，该index是较稳定的，一般不变。
-如何判断该用哪个端口：对于ip地址，要用内网地址（10或者192.168）而不是公网地址。对于网卡端口，down状态的没开就不管，开着的里面，一种是控制用的，一种是实验用的。判断方法一：看性能，比如max MTU更大的是可能实验用的，rate更大的可能是实验用的；方法二，看mac地址，跟内网地址配对的那个mac地址，对应的是实验端口，另外实验cloudlab页面的manifest里面也能看到mac地址，那就是实验端口的。
+解决：网卡多个端口，有一个端口默认是控制网络的，有的端口是给实验用的，有的端口是关闭的，所以要使用实验端口。不同端口的GID表是独立的，要查一下确认GID的index，该index是较稳定的，一般不变。
+如何判断该用哪个端口：对于ip地址，要用内网地址（10或者192.168）而不是公网地址。对于网卡端口，down状态的没开就不管，开着的里面，一种是控制用的，一种是实验用的。判断方法一：看性能，比如max MTU更大的可能是实验用的，rate更大的可能是实验用的；方法二，看mac地址，跟内网地址配对的那个mac地址，对应的是实验端口，另外实验cloudlab页面的manifest里面也能看到mac地址，那就是实验端口的。
 三个指令：ip addr; ibstat; ibv_devinfo
 
 
 问题：c6525-25g节点，用不了perftest
 备注：不知道为啥，这个节点的rdma似乎有问题，后来没再试过，不用，用别的
+
+
+问题：跑 bbf 发现假阳率比 bf 高了几倍
+猜测：猜是因为哈希的随机程度不够理想，block 不够随机平均。
+
 
 
 # 思考
