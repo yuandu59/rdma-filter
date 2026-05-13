@@ -139,4 +139,91 @@ ibm8335, r7525, r650, r6525, nvidiagh, r6615
 
 # 思考
 
-rdma设计模式比如qp，cq等等，都是异步思维，然而现在我在把他当成同步在用。
+rdma 设计模式比如 qp ，cq 等等，都是异步思维，然而现在我在把他当成同步在用。我觉得可以使用协程，deepseek 建议协程的话使用协程池的模式。
+
+rdma 读 cq 有两种方式，一种自旋轮询，第二种我之前不知道，是阻塞，等网卡填cq的时候叫醒。下面是 deepseek 给的一个代码示例。
+```c
+#include <infiniband/verbs.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+
+// 假设全局已有：
+// struct ibv_context *ctx;      // 设备上下文
+// struct ibv_cq *cq;            // 已经创建好的CQ
+// struct ibv_qp *qp;            // 已经创建好的QP
+
+// 本函数会阻塞等待CQ中有完成项，然后处理它
+void wait_for_completion_and_poll(struct ibv_cq *cq, struct ibv_comp_channel *channel) {
+    struct ibv_cq *ev_cq;      // 收到事件时，会填上哪个CQ发生了事件
+    void *ev_ctx;              // 事件上下文（创建CQ时可设置，这里没用到）
+    struct ibv_wc wc;          // 用于存放一个完成条目（Completion Entry）
+    int ret;
+
+    // ===== 步骤1：请求一个通知 =====
+    // 告诉硬件：下次CQ有新的完成时，请通过 completion channel 发一个事件通知我
+    // 参数0表示“下次任何类型的完成”都通知（也可以设1表示只在CQ从空变非空时通知）
+    if (ibv_req_notify_cq(cq, 0)) {
+        fprintf(stderr, "ibv_req_notify_cq failed\n");
+        return;
+    }
+
+    // ===== 步骤2：阻塞等待网卡事件 =====
+    // 这个函数会阻塞当前线程，直到网卡通过 completion channel 发送一个事件。
+    // 当网卡把完成项写入CQ时，它会同时通过channel发信号。
+    if (ibv_get_cq_event(channel, &ev_cq, &ev_ctx)) {
+        fprintf(stderr, "ibv_get_cq_event failed\n");
+        return;
+    }
+
+    // 到达这里说明：网卡已经通知我们有完成项了。
+    // 注意：ibv_get_cq_event 只会告诉我们“至少有一个完成项”，但不会告诉我们具体有多少个。
+    // 所以我们接下来需要去轮询CQ，取出所有已经完成的项。
+
+    // ===== 步骤3：确认这个事件（必须调用，否则后续事件可能不触发）=====
+    // 参数：哪个CQ，确认多少个事件（通常1）
+    ibv_ack_cq_events(cq, 1);
+
+    // ===== 步骤4：不断轮询，把当前CQ中所有的完成项都取出来处理 =====
+    // 注意：因为网卡可能在我们处理的同时又完成了新的操作，并写入了CQ，
+    // 所以我们要一直轮询直到没有新的完成项为止。
+    while (1) {
+        // ibv_poll_cq 每次从CQ中取出一个完成项（如果存在），返回1，并把内容填入wc。
+        // 如果CQ里没有完成项，返回0。
+        // 如果出错，返回负数。
+        ret = ibv_poll_cq(cq, 1, &wc);
+        if (ret < 0) {
+            fprintf(stderr, "ibv_poll_cq error\n");
+            break;
+        }
+        if (ret == 0) {
+            // CQ已经空了，退出循环
+            break;
+        }
+
+        // 处理这个完成项
+        if (wc.status != IBV_WC_SUCCESS) {
+            // 操作失败
+            fprintf(stderr, "Work completion error: %d (wr_id=%lu)\n", wc.status, (unsigned long)wc.wr_id);
+            // 这里可以做一些错误处理，比如重新提交或标记失败
+        } else {
+            // 操作成功
+            // wc.wr_id 是我们提交操作时设置的自定义ID，通常用于找到对应的请求上下文
+            printf("Successful completion: wr_id=%lu, opcode=%d\n", 
+                   (unsigned long)wc.wr_id, wc.opcode);
+            // 根据 wr_id 找到之前提交的请求，处理数据等...
+        }
+    }
+
+    // ===== 步骤5：重要！为了下一次能继续收到通知，需要再次调用 ibv_req_notify_cq =====
+    // 注意：上面的 ibv_poll_cq 循环已经把所有完成项取干净了。
+    // 如果我们不重新请求通知，下一次有新完成时网卡不会发事件，我们就永远阻塞在 ibv_get_cq_event 了。
+    // 所以通常在循环的开头或结尾重新请求通知。这里我们放在函数末尾，但实际业务中往往是个无限循环。
+    if (ibv_req_notify_cq(cq, 0)) {
+        fprintf(stderr, "ibv_req_notify_cq (rearm) failed\n");
+    }
+
+    // 接下来你可以继续调用本函数，再次等待下一个完成事件。
+    // 实际使用时，通常会写一个 while(1) { wait_and_process(...); } 循环。
+}
+```
